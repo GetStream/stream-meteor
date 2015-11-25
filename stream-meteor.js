@@ -10,8 +10,8 @@ if (Meteor.isServer) {
   var stream = Npm.require('stream-node');
 
   var apiKey = Meteor.settings.public.streamApiKey,
-  apiAppId = Meteor.settings.public.streamApiAppId,
-  apiSecret = Meteor.settings.streamApiSecret;
+      apiAppId = Meteor.settings.public.streamApiAppId,
+      apiSecret = Meteor.settings.streamApiSecret;
 
   var STREAM_CONFIG = {
     apiKey,

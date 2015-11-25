@@ -1,7 +1,7 @@
 Stream.activityCollection = function(name, options) {
   var _helpers = {};
 
-  _.extend(_helpers, BaseActivity, options.methods, {
+  _.extend(_helpers, BaseActivity, options.transform, {
     activityVerb: function() {
       return options.verb;
     },
@@ -41,56 +41,4 @@ Stream.activityCollection = function(name, options) {
 
   return collection;
 };
-
-// ActivityCollection = function(name, verb) {
-// 	Mongo.Collection.call(this, name, {
-// 		transform: this.transform.bind(this)
-// 	});
-
-// 	this._name = name;
-// 	this._verb = verb;
-// 	this._methods = {};
-// 	this._statics = {};
-
-// 	if(Meteor.isServer) {
-// 		//this.after.insert(this.afterInsert.bind(this));
-// 	}
-// }
-
-// ActivityCollection.prototype = Object.create(Mongo.Collection.prototype);
-
-// _.extend(ActivityCollection.prototype, {
-// 	afterInsert: function (userId, doc) {
-// 		// Perform transformation as if document was retrieved from Mongo
-// 		// This way we have access to methods on doc
-// 		doc = this.transform(doc);
-
-// 		FeedManager.activityCreated(doc);
-// 	},
-
-// 	transform: function (doc) {
-// 		var self = this;
-// 		var Activity = _.extend(BaseActivity, this._methods, {
-// 				activityVerb : function() {
-// 					return self._verb;
-// 				},
-
-// 				collectionName : function() {
-// 					return self._name;
-// 				}
-// 			}),
-// 			// Create an object with Activity as its prototype
-// 			activity = Object.create(Activity);
-
-// 		return _.extend(activity, doc);
-// 	},
-
-// 	methods: function (mts) {
-// 		_.extend(this._methods, mts);
-// 	},
-
-// 	statics: function (sts) {
-// 		_.extend(this._statics, sts);
-// 	}
-// });
 
