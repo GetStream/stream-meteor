@@ -1,5 +1,3 @@
-##Stream NodeJS
-
 [![Build Status](https://travis-ci.org/tbarbugli/stream-meteor.svg)](https://travis-ci.org/tbarbugli/stream-meteor)
 [![npm version](https://badge.fury.io/js/getstream-meteor.svg)](http://badge.fury.io/js/getstream-meteor)
 
