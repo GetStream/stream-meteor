@@ -1,13 +1,13 @@
 Stream.Backend = StreamBackend = function() {
 };
 
-_.extend(StreamBackend.prototype, {
+StreamBackend.prototype = {
   isReference: function(field, value) {
     if (field === 'origin' || field === 'foreign_id') {
       return false;
     }
 
-    return (typeof (value) === 'string' && value.split(':').length == 2);
+    return (typeof (value) === 'string' && value.split(':').length === 2);
   },
 
   iterActivityFields: function(activities, filter, fn) {
@@ -22,10 +22,6 @@ _.extend(StreamBackend.prototype, {
         fn(args);
       }
     }
-  },
-
-  iterActivityFieldsWithObjects: function(activities, fn) {
-    this.iterActivityFields(activities, function(field, value) { return (value !==  null && typeof (value) === 'object');}, fn);
   },
 
   iterActivityFieldsWithReferences: function(activities, fn) {
@@ -60,14 +56,17 @@ _.extend(StreamBackend.prototype, {
   },
 
   serializeActivities: function(activities) {
-    var self = this;
-    this.iterActivityFieldsWithObjects(activities, function(args) {
-      var value = args.activity[args.field];
-      args.activity[args.field] = self.serializeValue(value);
+    _(activities).each(activity => {
+
+      _(activity).each((value, field) => {
+        if(typeof value !== 'object' || value === null) return;
+        activity[field] = this.serializeValue(value);
+      });
+
     });
   },
 
-  loadFromStorage: function(modelClass, objectsIds, callback) {
+  loadFromStorage: function(modelClass, objectsIds) {
     return modelClass.find({_id: {$in: objectsIds}}).fetch();
   },
 
@@ -106,7 +105,7 @@ _.extend(StreamBackend.prototype, {
   },
 
   populate: function(object) {
-    if (typeof object.populate === 'function') {
+    if (_.isFunction(object.populate)) {
       object.populate();
     }
 
@@ -133,5 +132,5 @@ _.extend(StreamBackend.prototype, {
     return ref.split(':')[1];
   },
 
-});
+};
 

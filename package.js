@@ -1,12 +1,8 @@
 Package.describe({
-  name: 'stream-meteor',
+  name: 'getstream:stream-meteor',
   version: '0.1.0',
-  // Brief, one-line summary of the package.
   summary: 'Getstream.io integration package for Meteor',
-  // URL to the Git repository containing the source code for this package.
-  git: '',
-  // By default, Meteor will default to using README.md for documentation.
-  // To avoid submitting documentation, set this field to null.
+  git: 'https://github.com/GetStream/stream-meteor',
   documentation: 'README.md',
 });
 
@@ -26,9 +22,16 @@ Package.onUse(function(api) {
 
 Package.onTest(function(api) {
   api.use('ecmascript');
-  api.use('tinytest');
-  api.use('stream-meteor');
-  api.addFiles('stream-meteor-tests.js');
+  api.use('sanjo:jasmine@0.20.2');
+  // api.use('velocity:html-reporter');
+  api.use('mongo');
+  api.use('insecure');
+  api.use('accounts-base');
+  api.use('getstream:stream-meteor');
+
+  api.addFiles('test/client/spec.js', ['client']);
+  api.addFiles('test/server/spec.js', ['server']);
+  api.addFiles('test/spec.js');
 });
 
 Npm.depends({

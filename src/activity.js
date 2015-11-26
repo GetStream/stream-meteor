@@ -4,7 +4,7 @@ BaseActivity = {
   },
 
   activityGetActor: function() {
-    var prop = _.isFunction(this.activityActorProp) ? this.activityActorProp() : this.activityActorProp;
+    var prop = this.activityActorProp();
     var actor = this[prop];
     if (typeof (actor) === 'undefined') {
       throw new Error(`Activity field '${this.activityActorProp()}' is not present`);
@@ -46,7 +46,9 @@ BaseActivity = {
     return activity;
   },
 
-  activityActorProp: 'user',
+  activityActorProp: function() {
+    return 'actor';
+  },
 
   activityExtraData: function() {
     return {};

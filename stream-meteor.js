@@ -7,7 +7,7 @@ if (typeof Stream !== 'undefined') {
 Stream = {};
 
 if (Meteor.isServer) {
-  var stream = Npm.require('stream-node');
+  var stream = Npm.require('getstream-node');
 
   var apiKey = Meteor.settings.public.streamApiKey,
       apiAppId = Meteor.settings.public.streamApiAppId,
@@ -19,6 +19,5 @@ if (Meteor.isServer) {
     apiAppId,
   };
 
-  FeedManager = stream.feedManagerFactory(STREAM_CONFIG);
-  Stream.FeedManager = FeedManager;
+  Stream.FeedManager = FeedManager = stream.feedManagerFactory(STREAM_CONFIG);
 }
