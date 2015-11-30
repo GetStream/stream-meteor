@@ -1,70 +1,63 @@
-BaseActivity = {
-  activityActorFeed: function() {
-    return null;
-  },
+function get(obj, prop, context) {
+  var value = obj[prop];
 
-  activityGetActor: function() {
-    var prop = this.activityActorProp();
-    var actor = this[prop];
+  if(_.isFunction(value)) {
+    return value.apply(context || obj);
+  } else {
+    return value;
+  }
+}
+
+BaseActivity = {
+  activityActorFeed: null,
+  activityTime: null,
+  activityNotify: null,
+  activityActorProp: 'actor', 
+  activityExtraData: {},
+
+  activityActor() {
+    var actor = this[get(this, 'activityActorProp')];
+
     if (typeof (actor) === 'undefined') {
-      throw new Error(`Activity field '${this.activityActorProp()}' is not present`);
+      throw new Error(`Activity field '${get(this, 'activityActorProp')}' is not present`);
     }
 
     return `${Meteor.users._name}:${actor}`;
   },
 
-  activityActor: function() {
-    var actor = this.activityGetActor();
-    return actor;
-  },
-
-  activityObject: function() {
+  activityObject() {
     return this;
   },
 
-  activityForeignId: function() {
+  activityForeignId() {
     return this._id;
   },
 
-  createActivity: function() {
+  createActivity() {
     var activity = {};
-    var extra_data = this.activityExtraData();
+
+    var extra_data = get(this, 'activityExtraData');
+    
     for (var key in extra_data) {
       activity[key] = extra_data[key];
     }
 
-    activity.to = (this.activityNotify() || []).map(function(x) {return x.id;});
+    activity.to = (get(this, 'activityNotify') || []).map(function(x) {
+      return x.id;
+    });
 
-    activity.actor = this.activityActor();
-    activity.verb = this.activityVerb();
-    activity.object = this.activityObject();
-    activity.foreign_id = this.activityForeignId();
-    if (this.activityTime()) {
-      activity.time = this.activityTime();
+    activity.actor = get(this, 'activityActor');
+    activity.verb = get(this, 'activityVerb');
+    activity.object = get(this, 'activityObject');
+    activity.foreign_id = get(this, 'activityForeignId');
+    if (get(this, 'activityTime')) {
+      activity.time = get(this, 'activityTime');
     }
 
     return activity;
   },
 
-  activityActorProp: function() {
-    return 'actor';
+  populate() {
+    // override
   },
-
-  activityExtraData: function() {
-    return {};
-  },
-
-  activityTime: function() {},
-
-  activityNotify: function() {},
-
-  referencesPaths: function() {
-    return {};
-  },
-
-  getStreamBackend: function() {
-    return new Stream.Backend();
-  },
-
-  populate: function() {},
 };

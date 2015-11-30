@@ -1,37 +1,92 @@
 var backend = new Stream.Backend();
 
-Tweets = Stream.activityCollection('tweets', {
-	verb: 'tweet',
-	transform: {
-		getLink: function() {
-			return Links.findOne(this.link);
-		},
+var activityNotify =[
+	{ id: 'notification:1' },
+	{ id: 'notification:2' },
+];
 
-		populate: function() {
-			if(this.link) {
-				this.link = this.getLink();
-			}
-		},
+Tweets = Mongo.Collection('tweets', {
+	transform: function(doc) {
+		var base = {
+			getLink: function() {
+				return Links.findOne(this.link);
+			},
 
-		activityExtraData: function() {
-			return {
-				'bg': this.bg,
-				'link': `links:${this.link}`,
-			};
-		},
+			populate: function() {
+				if(this.link) {
+					this.link = this.getLink();
+				}
+			},
+		};
 
-		activityNotify: function() {
-			return [
-				{ id: 'notification:1' },
-				{ id: 'notification:2' },
-			];
-		}
+		return _.extend(Object.create(base), doc);
 	}
+});
+
+Stream.registerActivity(Tweets, {
+	activityVerb: 'tweet',
+	activityNotify: activityNotify,
+	activityExtraData: function() {
+		return {
+			'bg': this.bg,
+			'link': `links:${this.link}`,
+		};
+	},
 });
 
 Links = new Mongo.Collection('links');
 
 var backend = new Stream.Backend();
+
+describe('Collections', function() {
+	
+	beforeEach(function() {
+		spyOn(Stream.FeedManager, 'activityCreated');
+		spyOn(Stream.FeedManager, 'activityDeleted');
+	});
+
+	var userId = Meteor.users.insert({
+			name: 'test-user'
+		});
+
+	it('transform on findOne', function() {
+		var linkId = Links.insert({ href: 'http://getstream.io' });
+		var link = Links.findOne(linkId);
+
+		var tweetId = Tweets.insert({
+			text: 'test',
+			link: linkId,
+			actor: userId,
+		});
+
+		var tw = Tweets.findOne(tweetId);
+
+		expect(tw.activityNotify).toEqual(activityNotify);
+		expect(tw.getLink()).toEqual(link);
+		expect(tw.activityObject()).toEqual(tw);
+		expect(tw.activityForeignId()).toEqual(tweetId);
+		expect(tw.activityActor()).toEqual('users:' + userId);
+	});
+
+	it('transform on find', function() {
+		var linkId = Links.insert({ href: 'http://getstream.io' });
+		var link = Links.findOne(linkId);
+
+		var tweetId = Tweets.insert({
+			text: 'test',
+			link: linkId,
+			actor: userId,
+		});
+
+		var tw = Tweets.find(tweetId).fetch()[0];
+
+		expect(tw.activityNotify).toEqual(activityNotify);
+		expect(tw.getLink()).toEqual(link);
+		expect(tw.activityObject()).toEqual(tw);
+		expect(tw.activityForeignId()).toEqual(tweetId);
+		expect(tw.activityActor()).toEqual('users:' + userId);
+	});
+});
 
 describe("Stream.Backend", function() {
 
@@ -94,11 +149,9 @@ describe("Stream.Backend", function() {
 		var enriched = backend.enrichActivities([activity]);
 
 		expect(enriched.length).toBe(1);
-		expect(enriched[0]).toEqual(jasmine.objectContaining({
-			actor: user,
-			object: tweet,
-			foreign_id: tweetId
-		}));
+		expect(enriched[0].actor).toEqual(user);
+		expect(enriched[0].object._id).toEqual(tweet._id);
+		expect(enriched[0].foreign_id).toEqual(tweetId);
 	});
 
 	it('enrich aggregated activity complex mix', function() {
@@ -234,7 +287,7 @@ describe("Stream.Backend", function() {
 	});
 });
 
-describe("Stream.ActivityCollection", function() {
+xdescribe("Stream.ActivityCollection", function() {
 
 	var userId = Meteor.users.insert({
 			name: 'test-user'

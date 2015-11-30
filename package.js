@@ -24,7 +24,7 @@ Package.onTest(function(api) {
   api.use('ecmascript');
   api.use('sanjo:jasmine@0.20.2');
   // api.use('velocity:html-reporter');
-  api.use('mongo');
+  api.use(['underscore', 'mongo']);
   api.use('insecure');
   api.use('accounts-base');
   api.use('getstream:stream-meteor');

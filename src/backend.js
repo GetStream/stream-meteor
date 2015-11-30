@@ -47,7 +47,7 @@ StreamBackend.prototype = {
     return modelReferences;
   },
 
-  enrichAggregatedActivities: function(aggregatedActivities, callback) {
+  enrichAggregatedActivities: function(aggregatedActivities) {
     for (var aggregated of aggregatedActivities) {
       this.enrichActivities(aggregated['activities']);
     }
@@ -70,7 +70,7 @@ StreamBackend.prototype = {
     return modelClass.find({_id: {$in: objectsIds}}).fetch();
   },
 
-  retreiveObjects: function(references, callback) {
+  retreiveObjects: function(references) {
     var objects = {};
     var self = this;
 
@@ -121,8 +121,8 @@ StreamBackend.prototype = {
   },
 
   serializeValue: function(value) {
-    if (value._id) {
-      return `${value.collectionName()}:${value._id}`;
+    if (value._id && value.getCollectionName) {
+      return `${value.getCollectionName()}:${value._id}`;
     } else {
       return value;
     }

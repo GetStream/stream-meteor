@@ -30,7 +30,7 @@ Install getstream_node package with npm:
 Add the following keys to your settings.json with their respective values retrieved from your [dashboard](https://getstream.io/dashboard/)
 
 ```
-"streamApiSecret": "wssaz9dzdg56dyv5bgztcd7f6kpn2geh3xhn2wxz98zp698dbax4ryk27ea2vjfe",
+"streamApiSecret": "",
 
 "public" : {
   "streamApiKey": "",
@@ -44,49 +44,38 @@ Add the following keys to your settings.json with their respective values retrie
 Stream Meteor can automatically publish new activities to your feeds. To do that you only need to register the collections you want to publish with this library.
 
 ```js
-var Tweet = Stream.activityCollection({
-  verb: 'tweet',
+var Tweets = Mongo.Collection.('tweets');
+
+Stream.registerActivity(Tweets, {
+  activityVerb: 'tweet',
 });
 ```
 
 Every time a Tweet is created it will be added to the user's feed. Users which follow the given user will also automatically get the new tweet in their feeds.
 
-On retrieval of a document from the database several methods specific to an activity are added to the doc instance. You are able to define additional methods to add to a retrieved ```doc``` instance by supplying a methods object:
+On retrieval of a document from the database several methods specific to an activity are added to the doc instance's prototype. You are able to define additional methods to add to a retrieved ```doc``` instance by supplying a methods object:
 
 ```js
-var Tweet = Stream.activityCollection({
-  verb: 'tweet',
-  transform: {
-    getUser: function() {
-      return Meteor.users.findOne(this.user);
-    },
-  }
+Stream.registerActivity(Tweets, {
+  activityVerb: 'tweet',
+  activityNotify: [{ id: 'notification:1' }],
 });
 ```
 
-Methods are applied via a transformation function on Meteor Collections, see [transform reference]() in Meteor docs.
-And can for instance be used to retrieve related objects to a current document. The next section explains how we
-use the transform object to get the activity's context data
-
 ####Activity fields
 
-Collections are stored in feeds as activities. An activity is composed of at least the following fields: **actor**, **verb**, **object**, **time**. You can also add more custom data if needed.
-The activityCollection will try to set things up automatically:
+Collections are stored in feeds as activities. An activity is composed of at least the following fields: **actor**, **verb**, **object**, **time**. You can also add more custom data if needed. By registering a collection as an activity collection the integration library tries to setup things automatically:
 
 **object** is a reference to the collection instance
-**actor** is a reference to the user attribute of the instance
-**verb** is a string representation of the class name
+**actor** is a reference to the actor attribute of the instance
 
-By default the actor field will look for an attribute called user or actor and a field called created_at to track creation time.
+By default the actor field will look for an attribute called actor and a field called created_at to track creation time.
 If you're user field is called differently you'll need to tell us where to look for it.
 Below shows an example how to set things up if your user field is called author.
 
 ```js
-var Tweet = Stream.activityCollection('Tweet', {
-  verb: 'tweet',
-  transform: {
-    activityActorProp: 'actor';
-  },
+Stream.registerActivity(Tweets, {
+  activityActorProp: 'user';
 });
 ```
 
@@ -145,8 +134,8 @@ This is far from ready for usage in your template. We call the process of loadin
 Meteor.methods({
   activities: function() {
     var flatFeed = Stream.FeedManager.getNewsFeeds(this.userId)['flat'],
-      feed = await(flatFeed.get({})),
-      activities = feed.results;
+        feed = await(flatFeed.get({})),
+        activities = feed.results;
 
     return activities;
   }
@@ -161,16 +150,6 @@ Model syncronization can be disabled manually via environment variable.
 
 ```js
 NODE_ENV=test npm test
-```
-
-####Automatically populate paths:
-
-You can automatically populate paths during enrichment via pathsToPopulate static.
-
-```js
-tweetSchema.statics.pathsToPopulate = function() {
-  return ['link'];
-};
 ```
 
 ###Low level APIs access
