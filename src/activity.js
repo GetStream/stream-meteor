@@ -9,11 +9,12 @@ function get(obj, prop, context) {
 }
 
 BaseActivity = {
-  activityActorFeed: null,
   activityTime: null,
   activityNotify: null,
   activityActorProp: 'actor', 
   activityExtraData: {},
+
+  activityActorFeed() {},
 
   activityActor() {
     var actor = this[get(this, 'activityActorProp')];
@@ -55,6 +56,10 @@ BaseActivity = {
     }
 
     return activity;
+  },
+
+  getStreamBackend() {
+    return new Stream.Backend();
   },
 
   populate() {

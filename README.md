@@ -39,6 +39,8 @@ Add the following keys to your settings.json ([Meteor settings](http://docs.mete
 }
 ```
 
+Read more about how to use a settings.json file at the [Meteor Chef](https://themeteorchef.com/snippets/making-use-of-settings-json/)
+
 ###Collection integration
 
 Stream Meteor can automatically publish new activities to your feeds. To do that you only need to register the collections you want to publish with this library.

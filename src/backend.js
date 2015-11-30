@@ -1,5 +1,4 @@
-Stream.Backend = StreamBackend = function() {
-};
+Stream.Backend = StreamBackend = function() {};
 
 StreamBackend.prototype = {
   isReference: function(field, value) {
@@ -134,3 +133,4 @@ StreamBackend.prototype = {
 
 };
 
+Stream.backend = new Stream.Backend();

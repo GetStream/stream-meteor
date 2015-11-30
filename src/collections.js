@@ -1,6 +1,6 @@
 Stream.registerActivity = function(collection, activityDocProps) {
   var transform = function Document(doc) {
-    var base = _.extend(BaseActivity, {
+    var base = _.extend(_.clone(BaseActivity), {
       getCollectionName: () => collection._name,
     }, activityDocProps);
 
@@ -8,12 +8,12 @@ Stream.registerActivity = function(collection, activityDocProps) {
   };
 
   var afterInsert = function(userId, doc) {
-    doc = this.transform(doc);
+    doc = transform(this.transform(doc));
     FeedManager.activityCreated(doc);
   };
 
   var afterRemove = function(userId, doc) {
-    doc = this.transform(doc);
+    doc = transform(this.transform(doc));
     FeedManager.activityDeleted(doc);
   };
 
@@ -23,7 +23,7 @@ Stream.registerActivity = function(collection, activityDocProps) {
     collection.after.remove(afterRemove);
   }
 
-  var beforeFind = function(userId, selector, options) {
+  var beforeFind = function(userId, selector, options={}) {
     var _transform = options.transform;
 
     options.transform = function Document(doc) {

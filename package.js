@@ -11,7 +11,7 @@ Package.onUse(function(api) {
   api.use('ecmascript');
   api.use(['underscore', 'mongo']);
   api.use('matb33:collection-hooks');
-  api.use('dburles:mongo-collection-instances');
+  api.use('dburles:mongo-collection-instances@0.3.4');
 
   api.export('Stream');
   api.addFiles(['stream-meteor.js',
