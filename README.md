@@ -27,7 +27,7 @@ Install getstream_node package with npm:
 
 ```meteor add getstream:stream-meteor```
 
-Add the following keys to your settings.json with their respective values retrieved from your [dashboard](https://getstream.io/dashboard/)
+Add the following keys to your settings.json ([Meteor settings](http://docs.meteor.com/#/full/meteor_settings)) with their respective values retrieved from your [dashboard](https://getstream.io/dashboard/)
 
 ```
 "streamApiSecret": "",
@@ -44,7 +44,7 @@ Add the following keys to your settings.json with their respective values retrie
 Stream Meteor can automatically publish new activities to your feeds. To do that you only need to register the collections you want to publish with this library.
 
 ```js
-var Tweets = Mongo.Collection.('tweets');
+Tweets = Mongo.Collection.('tweets');
 
 Stream.registerActivity(Tweets, {
   activityVerb: 'tweet',
@@ -52,15 +52,6 @@ Stream.registerActivity(Tweets, {
 ```
 
 Every time a Tweet is created it will be added to the user's feed. Users which follow the given user will also automatically get the new tweet in their feeds.
-
-On retrieval of a document from the database several methods specific to an activity are added to the doc instance's prototype. You are able to define additional methods to add to a retrieved ```doc``` instance by supplying a methods object:
-
-```js
-Stream.registerActivity(Tweets, {
-  activityVerb: 'tweet',
-  activityNotify: [{ id: 'notification:1' }],
-});
-```
 
 ####Activity fields
 
@@ -78,6 +69,31 @@ Stream.registerActivity(Tweets, {
   activityActorProp: 'user';
 });
 ```
+
+Properties supplied in the second argument of ``registerActivity`` are automatically added on a document instance's prototype through the Mongo collection (transform)[http://docs.meteor.com/#/full/mongo_collection] method.
+
+#####Activity extra data
+
+Often you'll want to store more data than just the basic fields. You achieve this by implementing the **extraActivityData** method on the document instance:
+
+```js
+Stream.registerActivity(Tweets, {
+  activityVerb: 'tweet',
+  activityExtraData: function() {
+    return {
+      'isRetweet': this.isRetweet
+    };
+  }
+});
+```
+
+#####Other fields
+
+* **activityNotify** array of feeds to notify when document is inserted into collection
+* **activityActorFeed** which feed the activity is added to on creation
+* **activityTime** created at time set on the activity object that is send to the getstream API
+* **activityActorProp** which property holds the user id of current activity's actor
+* **activityExtraData** extra data set on the activity object that is send to the getstream API
 
 ###Feed manager
 
@@ -148,9 +164,7 @@ Promises are used to pipe the asynchronous result of `flatFeed.get` and `StreamB
 
 Model syncronization can be disabled manually via environment variable.
 
-```js
-NODE_ENV=test npm test
-```
+NOT IMPLEMENTED
 
 ###Low level APIs access
 When needed you can also use the low level JS API directly.
