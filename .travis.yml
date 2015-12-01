@@ -1,4 +1,5 @@
 language: "node_js"
+sudo: required
 node_js:
   - "0.10"
 services:
@@ -6,6 +7,5 @@ services:
 before_install:
   - "npm install -g velocity-cli"
   - "curl -L http://git.io/ejPSng | /bin/sh"
-  - "sleep 50"
 script:
   - "velocity test-package --ci"
