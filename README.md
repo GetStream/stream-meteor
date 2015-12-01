@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/GetStream/stream-meteor.svg](https://travis-ci.org/GetStream/stream-meteor)
+[![Build Status](https://travis-ci.org/GetStream/stream-meteor.svg)](https://travis-ci.org/GetStream/stream-meteor)
 
 This package helps you create activity streams & newsfeeds with MeteorJS and [GetStream.io](https://getstream.io).
 
