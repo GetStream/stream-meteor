@@ -3,13 +3,36 @@ var apiKey = Meteor.settings.public.streamApiKey,
 
 var settings = _.clone(Config);
 
+if(! apiKey) {
+  throw new Meteor.Error('misconfig', 'No getstream.io app api key found in your settings.json\n hint: Are you running meteor with --settings settings.json?'); 
+}
+
+if(! apiAppId) {
+  throw new Meteor.Error('misconfig', 'No getstream.io app id key found in your settings.json\n hint: Are you running meteor with --settings settings.json?'); 
+}
+
 settings['apiKey'] = apiKey;
 settings['apiAppId'] = apiAppId;
 
 if (Meteor.isServer) {
   Stream.stream = Npm.require('getstream');
 
+  if(! Meteor.settings.streamApiSecret) {
+    throw new Meteor.Error('misconfig', 'No getstream.io private key found in your settings.json\n hint: Are you running meteor with --settings settings.json?');
+  }
   settings['apiSecret'] = Meteor.settings.streamApiSecret;
+}
+
+if(Meteor.settings.userFeed) {
+  settings['userFeed'] = Meteor.settings.userFeed;
+}
+
+if(Meteor.settings.notificationFeed) {
+  settings['notificationFeed'] = Meteor.settings.notificationFeed;
+}
+
+if(Meteor.settings.newsFeeds) {
+  settings['newsFeeds'] = Meteor.settings.newsFeeds;
 }
 
 Stream.feedManager = new FeedManager(settings);
