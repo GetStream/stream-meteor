@@ -2,7 +2,7 @@
 
 This package helps you create activity streams & newsfeeds with MeteorJS and [GetStream.io](https://getstream.io).
 
-##Build activity streams & news feeds
+## Build activity streams & news feeds
 
 <p align="center">
   <img src="https://dvqg2dogggmn6.cloudfront.net/images/mood-home.png" alt="Examples of what you can build" title="What you can build"/>
@@ -20,7 +20,7 @@ You can build:
 
 You can check out our example app built using this library on Github [https://github.com/GetStream/Stream-Example-Meteor](https://github.com/GetStream/Stream-Example-Meteor)
 
-##Installation
+## Installation
 
 Add the package to your Meteor by app by running the following command:
 
@@ -40,7 +40,7 @@ Add the following keys to your settings.json ([Meteor settings](http://docs.mete
 
 Read more about how to use a settings.json file at the [Meteor Chef](https://themeteorchef.com/snippets/making-use-of-settings-json/)
 
-##Collection integration
+## Collection integration
 
 Stream Meteor can automatically publish new activities to your feeds. To do that you only need to register the collections you want to publish with this library.
 
@@ -54,7 +54,7 @@ Stream.registerActivity(Tweets, {
 
 Every time a Tweet is created it will be added to the user's feed. Users which follow the given user will also automatically get the new tweet in their feeds.
 
-###Activity fields
+### Activity fields
 
 Collections are stored in feeds as activities. An activity is composed of at least the following fields: **actor**, **verb**, **object**, **time**. You can also add more custom data if needed. By registering a collection as an activity collection the integration library tries to setup things automatically:
 
@@ -73,7 +73,7 @@ Stream.registerActivity(Tweets, {
 
 Properties supplied in the second argument of ``registerActivity`` are automatically added on a document instance's prototype through the Mongo collection (transform)[http://docs.meteor.com/#/full/mongo_collection] method.
 
-###Activity extra data
+### Activity extra data
 
 Often you'll want to store more data than just the basic fields. You achieve this by implementing the **extraActivityData** method on the document instance:
 
@@ -88,7 +88,7 @@ Stream.registerActivity(Tweets, {
 });
 ```
 
-###Other fields
+### Other fields
 
 * **activityNotify** array of feeds to notify when document is inserted into collection
 * **activityActorFeed** which feed the activity is added to on creation
@@ -96,23 +96,23 @@ Stream.registerActivity(Tweets, {
 * **activityActorProp** which property holds the user id of current activity's actor
 * **activityExtraData** extra data set on the activity object that is send to the getstream API
 
-##Feed manager
+## Feed manager
 
 This packages comes with a FeedManager class that helps with all common feed operations. This class can be accessed from both the client and the server, to use the FeedManager on the client consult the section *Using feed manager on the client*. 
 
 
-###Feeds bundled with feed_manager
+### Feeds bundled with feed_manager
 
 To get you started the manager has 4 feeds pre configured. You can add more feeds if your application needs it.
 The three feeds are divided in three categories.
 
-###User feed:
+### User feed:
 The user feed stores all activities for a user. Think of it as your personal Facebook page. You can easily get this feed from the manager.  
 ```js
 Stream.feedManager.getUserFeed(this.user);
 ```  
 
-###News feeds:
+### News feeds:
 The news feeds store the activities from the people you follow. 
 There is both a flat newsfeed (similar to twitter) and an aggregated newsfeed (like facebook).
 
@@ -121,17 +121,18 @@ var flatFeed = Stream.feedManager.getNewsFeeds(foundUser.id)['flat'];
 var aggregatedFeed = Stream.feedManager.getNewsFeeds(this.user)['aggregated'];
 ```
 
-###Notification feed:
+### Notification feed:
 The notification feed can be used to build notification functionality. 
 
 <p align="center">
   <img src="http://feedly.readthedocs.org/en/latest/_images/fb_notification_system.png" alt="Notification feed" title="Notification feed"/>
+</p>
   
 ```js
 var notificationFeed = Stream.feedManager.getNotificationFeed(this.userId);
 ```
 
-###Realtime updates
+### Realtime updates
 All feeds can return realtime updates by subscribing through their ``subscribe`` method:
 
 ```js
@@ -140,14 +141,14 @@ notificationFeed.subscribe(function(data) {
 });
 ```
 
-###Follow a feed
+### Follow a feed
 The create the newsfeeds you need to notify the system about follow relationships. The manager comes with APIs to let a user's news feeds follow another user's feed. This code lets the current user's flat and aggregated feeds follow the target_user's personal feed.
 
 ```
 Stream.feedManager.followUser(userId, targetId);
 ```
 
-###Using feed managers on the client
+### Using feed managers on the client
 The server has access to your getstream.io secret key, this makes it possible to edit feeds of any user. For obvious security reasons the client does not have access to all feeds, and to grant it access to the feed of the current user we need to generate a feed token. 
 
 ```js
@@ -186,7 +187,7 @@ Meteor.call('notificationFeedToken', function(err, token) {
 
 ## Showing the newsfeed
 
-###Activity enrichment
+### Activity enrichment
 
 When you read data from feeds, a like activity will look like this:
 
@@ -224,13 +225,13 @@ Meteor.call('activities', function(err, activities) {
 });
 ```
 
-##Low level APIs access
+## Low level APIs access
 When needed you can also use the low level JS API directly.
 The full explanation can be found in the [getstream.io documentation](https://getstream.io/docs/).
 
-##Contributing
+## Contributing
 
-###Running tests
+### Running tests
 
 To run the tests first install the velocity-cli:
 
