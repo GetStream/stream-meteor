@@ -5,7 +5,10 @@ node_js:
 services:
   - "mongodb"
 before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - "export PATH=$HOME/.meteor:$PATH"
   - "npm install -g velocity-cli"
   - "curl -L http://git.io/ejPSng | /bin/sh"
 script:
-  - "velocity test-package --ci"
+  - "JASMINE_SERVER_INTEGRATION=0 JASMINE_SERVER_UNIT=0 JASMINE_BROWSER=Firefox velocity test-package ./ --ci"
