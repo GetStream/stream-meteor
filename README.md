@@ -201,7 +201,7 @@ This is far from ready for usage in your template. We call the process of loadin
 if(Meteor.isServer) {
 	Meteor.methods({
   	activities: function() {
-    	var flatFeed = Stream.FeedManager.getNewsFeeds(this.userId)['flat'],
+    	var flatFeed = Stream.feedManager.getNewsFeeds(this.userId)['flat'],
         	feed = Stream.await(flatFeed.get({})),
         	activities = feed.results;
 	
