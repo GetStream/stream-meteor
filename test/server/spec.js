@@ -5,7 +5,7 @@ var activityNotify =[
 	{ id: 'notification:2' },
 ];
 
-var Tweets = Mongo.Collection('tweets', {
+var Tweets = new Mongo.Collection('tweets', {
 	transform: function(doc) {
 		var base = {
 			getLink: function() {
@@ -29,7 +29,7 @@ Stream.registerActivity(Tweets, {
 	activityExtraData: function() {
 		return {
 			'bg': this.bg,
-			'link': `links:${this.link}`,
+			'link': this.link ? `links:${this.link}` : '',
 		};
 	},
 });
@@ -154,6 +154,18 @@ describe("Stream.Backend", function() {
 		expect(enriched[0].actor).toEqual(user);
 		expect(enriched[0].object._id).toEqual(tweet._id);
 		expect(enriched[0].foreign_id).toEqual(tweetId);
+	});
+
+	it('throws Meteor.Error when enriching activity field that does not exist', function() {
+		var activity = {
+			object: 'links:undefined'
+		};
+		
+		function test() {
+			backend.enrichActivities([activity]);
+		}
+		
+		expect(test).toThrowError(Meteor.Error);
 	});
 
 	it('enrich aggregated activity complex mix', function() {
@@ -406,5 +418,39 @@ describe('Stream.activity', function() {
 		var activity = tweet.createActivity();
 
 		expect(activity.actor).toBe('users:' + userId);
+	});
+});
+
+describe("Stream.feedManager", function() {
+	beforeEach(function() {
+		spyOn(Stream.feedManager.client, "feed").and.returnValue({ token: "some-token" });
+	});
+
+	it("#getNotificationFeedToken", function() {
+		expect(Stream.feedManager.getNotificationFeedToken).toBeDefined();
+
+		var token = Stream.feedManager.getNotificationFeedToken("some-user-id");
+
+		expect(Stream.feedManager.client.feed).toHaveBeenCalled();
+		expect(token).toEqual('some-token');
+	});
+
+	it("#getUserFeedToken", function() {
+		expect(Stream.feedManager.getUserFeedToken).toBeDefined();
+
+		var token = Stream.feedManager.getUserFeedToken("some-user-id");
+
+		expect(Stream.feedManager.client.feed).toHaveBeenCalled();
+		expect(token).toEqual('some-token');
+	});
+
+	it("#getNewsFeedsTokens", function() {
+		expect(Stream.feedManager.getNewsFeedsTokens).toBeDefined();
+
+		var tokens = Stream.feedManager.getNewsFeedsTokens("some-user-id");
+
+		expect(Stream.feedManager.client.feed).toHaveBeenCalled();
+		expect(tokens['flat']).toEqual('some-token');
+		expect(tokens['aggregated']).toEqual('some-token');
 	});
 });

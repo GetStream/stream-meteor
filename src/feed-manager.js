@@ -1,3 +1,22 @@
+if(Meteor.isServer) {
+  var Future = Npm.require('fibers/future');
+
+  Stream.await = function(promise) {
+    var fut = new Future();
+
+    promise.then(fut.return.bind(fut), 
+      function(err) {
+        if(err.status_code && err.detail) {
+          fut.throw('Feed request failed with code: ' + err.status_code + ' and detail: ' + err.detail);
+        } else {
+          fut.throw('Getstream.io API request failed with error', err);
+        }
+    });
+
+    return fut.wait();
+  };
+}
+
 FeedManager = function () {
   this.initialize.apply(this, arguments);
 };
@@ -18,7 +37,7 @@ FeedManager.prototype = {
     } else {
       this.client = Stream.stream.connect(this.settings.apiKey, this.settings.apiSecret, this.settings.apiAppId, options);
     }
-    
+  
   },
 
   databrowserLink: function(feed) {
@@ -33,8 +52,16 @@ FeedManager.prototype = {
     return this.client.feed(this.settings.userFeed, userId, token);
   },
 
+  getUserFeedToken: function(userId) {
+    return this.client.feed(this.settings.userFeed, userId).token;
+  },
+
   getNotificationFeed: function(userId, token) {
     return this.client.feed(this.settings.notificationFeed, userId, token);
+  },
+
+  getNotificationFeedToken: function(userId) {
+    return this.client.feed(this.settings.notificationFeed, userId).token;
   },
   
   getNewsFeeds: function(userId, token) {
@@ -47,6 +74,16 @@ FeedManager.prototype = {
     }
 
     return feeds;
+  },
+
+  getNewsFeedsTokens: function(userId) {
+    var feeds = this.getNewsFeeds(userId);
+
+    for(let feed of Object.keys(feeds)) {
+      feeds[feed] = feeds[feed].token;
+    }
+
+  return feeds;
   },
 
   followUser: function(userId, targetUserId) {

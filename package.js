@@ -10,8 +10,8 @@ Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
   api.use('ecmascript');
   api.use(['underscore', 'mongo']);
-  api.use('matb33:collection-hooks');
-  api.use('dburles:mongo-collection-instances');
+  api.use('matb33:collection-hooks@0.7.15');
+  api.use('dburles:mongo-collection-instances@0.3.4');
   api.use('cosmos:browserify@0.9.2', 'client');
 
   api.export('Stream');
@@ -41,4 +41,5 @@ Package.onTest(function(api) {
 
 Npm.depends({
   "getstream": "3.0.0",
+  "fibers": "1.0.8",
 });
