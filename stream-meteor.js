@@ -1,23 +1,15 @@
-// Create a new namespace for this package
+var apiKey = Meteor.settings.public.streamApiKey,
+    apiAppId = Meteor.settings.public.streamApiAppId;
 
-if (typeof Stream !== 'undefined') {
-  throw new Meteor.Error('Namespace Stream is already in use by another package');
-}
+var settings = _.clone(Config);
 
-Stream = {};
+settings['apiKey'] = apiKey;
+settings['apiAppId'] = apiAppId;
 
 if (Meteor.isServer) {
-  var stream = Npm.require('getstream-node');
+  Stream.stream = Npm.require('getstream');
 
-  var apiKey = Meteor.settings.public.streamApiKey,
-      apiAppId = Meteor.settings.public.streamApiAppId,
-      apiSecret = Meteor.settings.streamApiSecret;
-
-  var STREAM_CONFIG = {
-    apiKey,
-    apiSecret,
-    apiAppId,
-  };
-
-  Stream.FeedManager = FeedManager = stream.feedManagerFactory(STREAM_CONFIG);
+  settings['apiSecret'] = Meteor.settings.streamApiSecret;
 }
+
+Stream.feedManager = new FeedManager(settings);

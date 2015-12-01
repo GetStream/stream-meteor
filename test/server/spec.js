@@ -5,7 +5,7 @@ var activityNotify =[
 	{ id: 'notification:2' },
 ];
 
-Tweets = Mongo.Collection('tweets', {
+var Tweets = Mongo.Collection('tweets', {
 	transform: function(doc) {
 		var base = {
 			getLink: function() {
@@ -34,15 +34,15 @@ Stream.registerActivity(Tweets, {
 	},
 });
 
-Links = new Mongo.Collection('links');
+var Links = new Mongo.Collection('links');
 
 var backend = new Stream.Backend();
 
 describe('Collections', function() {
 	
 	beforeEach(function() {
-		spyOn(Stream.FeedManager, 'activityCreated');
-		spyOn(Stream.FeedManager, 'activityDeleted');
+		spyOn(Stream.feedManager, 'activityCreated');
+		spyOn(Stream.feedManager, 'activityDeleted');
 	});
 
 	var userId = Meteor.users.insert({
@@ -66,6 +66,8 @@ describe('Collections', function() {
 		expect(tw.activityObject()).toEqual(tw);
 		expect(tw.activityForeignId()).toEqual(tweetId);
 		expect(tw.activityActor()).toEqual('users:' + userId);
+		expect(tw.activityActorFeed()).toBeUndefined();
+		expect(tw.getStreamBackend).toBeDefined();
 	});
 
 	it('transform on find', function() {
@@ -103,8 +105,8 @@ describe("Stream.Backend", function() {
 	var link = Links.findOne(linkId);
 
 	beforeEach(function() {
-		spyOn(Stream.FeedManager, 'activityCreated');
-		spyOn(Stream.FeedManager, 'activityDeleted');
+		spyOn(Stream.feedManager, 'activityCreated');
+		spyOn(Stream.feedManager, 'activityDeleted');
 	});
 
 	it('has methods', function() {
@@ -302,27 +304,27 @@ xdescribe("Stream.ActivityCollection", function() {
 	var link = Links.findOne(linkId);
 
 	beforeEach(function() {
-		spyOn(Stream.FeedManager, 'activityCreated');
-		spyOn(Stream.FeedManager, 'activityDeleted');
+		spyOn(Stream.feedManager, 'activityCreated');
+		spyOn(Stream.feedManager, 'activityDeleted');
 	});
 
-	it("calls activityCreated on the FeedManager after insertion", function() {
+	it("calls activityCreated feedManager the feedmanager after insertion", function() {
 		Tweets.insert({
 			'text': 'test',
 			'actor': this.user,
 		});
 
-		expect(Stream.FeedManager.activityCreated).toHaveBeenCalled();
+		expect(StreamfeedManagerfeedmanager.activitycreated).toHaveBeenCalled();
 	});
 
-	it("calls activityDeleted on the FeedManager after deletion", function() {
+	it("calls activityDeleted feedManager the feedmanager after deletion", function() {
 		var tweetId = Tweets.insert({
 			text: 'text'
 		});
 
 		Tweets.remove(tweetId);
 
-		expect(Stream.FeedManager.activityDeleted).toHaveBeenCalled();
+		expect(StreamfeedManagerfeedmanager.activitydeleted).toHaveBeenCalled();
 	});
 
 	it('only calls populate once', function() {
@@ -348,8 +350,8 @@ describe('Stream.activity', function() {
 		});
 
 	beforeEach(function() {
-		spyOn(Stream.FeedManager, 'activityCreated');
-		spyOn(Stream.FeedManager, 'activityDeleted');
+		spyOn(Stream.feedManager, 'activityCreated');
+		spyOn(Stream.feedManager, 'activityDeleted');
 	});
 
 	it('should follow model reference naming convention', function() {

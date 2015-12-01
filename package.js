@@ -11,10 +11,15 @@ Package.onUse(function(api) {
   api.use('ecmascript');
   api.use(['underscore', 'mongo']);
   api.use('matb33:collection-hooks');
-  api.use('dburles:mongo-collection-instances@0.3.4');
+  api.use('dburles:mongo-collection-instances');
+  api.use('cosmos:browserify@0.9.2', 'client');
 
   api.export('Stream');
-  api.addFiles(['stream-meteor.js',
+  api.addFiles('src/namespace.js');
+  api.addFiles('src/stream.browserify.js', 'client');
+  api.addFiles(['config/getstream.js',
+                'src/feed-manager.js',
+                'stream-meteor.js',
                 'src/collections.js',
                 'src/activity.js',
                 'src/backend.js',]);
@@ -35,5 +40,5 @@ Package.onTest(function(api) {
 });
 
 Npm.depends({
-  "getstream-node": "1.0.0",
+  "getstream": "3.0.0",
 });

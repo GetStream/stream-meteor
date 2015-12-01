@@ -9,12 +9,12 @@ Stream.registerActivity = function(collection, activityDocProps) {
 
   var afterInsert = function(userId, doc) {
     doc = transform(this.transform(doc));
-    FeedManager.activityCreated(doc);
+    Stream.feedManager.activityCreated(doc);
   };
 
   var afterRemove = function(userId, doc) {
     doc = transform(this.transform(doc));
-    FeedManager.activityDeleted(doc);
+    Stream.feedManager.activityDeleted(doc);
   };
 
   if (Meteor.isServer) {

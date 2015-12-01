@@ -76,10 +76,17 @@ StreamBackend.prototype = {
     for (var modelRef of Object.keys(references)) {
       var refs = references[modelRef];
       var modelClass = self.getClassFromRef(modelRef);
+
       if (typeof (modelClass) === 'undefined') continue;
       if (typeof (objects[modelRef]) === 'undefined') objects[modelRef] = {};
 
       var objectsForRefs = self.loadFromStorage(modelClass, refs);
+
+      for(let id of refs) {
+        if(! _.findWhere(objectsForRefs, {_id: id})) {
+          throw new Meteor.Error('not-enrichable', `Collection with name ${modelRef} does not contain item with id ${id}`);
+        }
+      }
 
       for (var obj of objectsForRefs) {
         objects[modelRef][obj._id] = obj;
@@ -115,7 +122,13 @@ StreamBackend.prototype = {
     if (ref === 'user' || ref === 'users') {
       return Meteor.users;
     } else {
-      return Mongo.Collection.get(ref);
+      var collection = Mongo.Collection.get(ref);
+
+      if(! collection instanceof Mongo.Collection) {
+        throw new Meteor.Error('non-collection', `couldn\'t find collection with name ${ref}`);
+      }
+
+      return collection;
     }
   },
 
