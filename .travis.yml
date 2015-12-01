@@ -1,16 +1,13 @@
-language: node_js
-
+language: "node_js"
 node_js:
-	- "0.10"
-
+  - "0.10"
+  - "0.12"
 services:
-	- "mongodb"
-
+  - "mongodb"
 before_install:
-	- "npm install -g velocity-cli"
-	- "curl https://install.meteor.com | /bin/sh"
-	- "meteor update"
-	- "sleep 50"
-
+  - "npm install -g velocity-cli"
+  - "curl https://install.meteor.com | /bin/sh"
+  - "meteor update"
+  - "sleep 50"
 script:
-	- "velocity test-package --ci"
+  - "velocity test-package --ci"
