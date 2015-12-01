@@ -1,5 +1,4 @@
 var backend = new Stream.Backend();
-
 var activityNotify =[
 	{ id: 'notification:1' },
 	{ id: 'notification:2' },

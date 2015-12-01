@@ -34,9 +34,9 @@ Package.onTest(function(api) {
   api.use('accounts-base');
   api.use('getstream:stream-meteor');
 
+  api.addFiles('test/spec.js');
   api.addFiles('test/client/spec.js', ['client']);
   api.addFiles('test/server/spec.js', ['server']);
-  api.addFiles('test/spec.js');
 });
 
 Npm.depends({
