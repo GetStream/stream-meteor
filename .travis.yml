@@ -1,12 +1,11 @@
 language: "node_js"
 node_js:
   - "0.10"
-  - "0.12"
 services:
   - "mongodb"
 before_install:
   - "npm install -g velocity-cli"
-  - "curl https://install.meteor.com | /bin/sh"
+  - "curl -L http://git.io/ejPSng | /bin/sh"
   - "sleep 50"
 script:
   - "velocity test-package --ci"
