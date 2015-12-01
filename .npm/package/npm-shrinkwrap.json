@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "fibers": {
+      "version": "1.0.8"
+    },
     "getstream": {
       "version": "3.0.0",
       "dependencies": {
