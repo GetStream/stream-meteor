@@ -1,6 +1,6 @@
 Package.describe({
   name: 'getstream:stream-meteor',
-  version: '0.2.0',
+  version: '0.2.1',
   summary: 'Getstream.io integration package for Meteor',
   git: 'https://github.com/GetStream/stream-meteor',
   documentation: 'README.md',
@@ -12,11 +12,12 @@ Package.onUse(function(api) {
   api.use(['underscore', 'mongo']);
   api.use('matb33:collection-hooks@0.7.15');
   api.use('dburles:mongo-collection-instances@0.3.4');
-  api.use('cosmos:browserify@0.9.2', 'client');
+  api.use('getstream:bin-deps@0.1.1');
 
   api.export('Stream');
   api.addFiles('src/namespace.js');
-  api.addFiles('src/stream.browserify.js', 'client');
+  api.addFiles('src/client/namespace.js', 'client');
+  api.addFiles('src/server/namespace.js', 'server');
   api.addFiles(['config/getstream.js',
                 'src/feed-manager.js',
                 'stream-meteor.js',
@@ -29,7 +30,6 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
   api.use('ecmascript');
   api.use('sanjo:jasmine@0.20.2');
-  // api.use('velocity:html-reporter');
   api.use(['underscore', 'mongo']);
   api.use('insecure');
   api.use('accounts-base');
@@ -38,9 +38,4 @@ Package.onTest(function(api) {
   api.addFiles('test/spec.js');
   api.addFiles('test/client/spec.js', ['client']);
   api.addFiles('test/server/spec.js', ['server']);
-});
-
-Npm.depends({
-  "getstream": "3.0.0",
-  "fibers": "1.0.8",
 });

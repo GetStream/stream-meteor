@@ -15,8 +15,6 @@ settings['apiKey'] = apiKey;
 settings['apiAppId'] = apiAppId;
 
 if (Meteor.isServer) {
-  Stream.stream = Npm.require('getstream');
-
   if(! Meteor.settings.streamApiSecret) {
     throw new Meteor.Error('misconfig', 'No getstream.io private key found in your settings.json\n hint: Are you running meteor with --settings settings.json?');
   }

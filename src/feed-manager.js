@@ -1,5 +1,5 @@
 if(Meteor.isServer) {
-  var Future = Npm.require('fibers/future');
+  var Future = Stream.Future;
 
   Stream.await = function(promise) {
     var fut = new Future();

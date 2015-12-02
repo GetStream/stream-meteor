@@ -1,0 +1,1 @@
+Stream.stream = StreamBinDeps.streamBrowser;
