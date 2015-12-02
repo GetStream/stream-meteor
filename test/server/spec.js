@@ -4,23 +4,7 @@ var activityNotify =[
 	{ id: 'notification:2' },
 ];
 
-var Tweets = new Mongo.Collection('tweets', {
-	transform: function(doc) {
-		var base = {
-			getLink: function() {
-				return Links.findOne(this.link);
-			},
-
-			populate: function() {
-				if(this.link) {
-					this.link = this.getLink();
-				}
-			},
-		};
-
-		return _.extend(Object.create(base), doc);
-	}
-});
+var Tweets = new Mongo.Collection('tweets');
 
 Stream.registerActivity(Tweets, {
 	activityVerb: 'tweet',
@@ -61,7 +45,6 @@ describe('Collections', function() {
 		var tw = Tweets.findOne(tweetId);
 
 		expect(tw.activityNotify).toEqual(activityNotify);
-		expect(tw.getLink()).toEqual(link);
 		expect(tw.activityObject()).toEqual(tw);
 		expect(tw.activityForeignId()).toEqual(tweetId);
 		expect(tw.activityActor()).toEqual('users:' + userId);
@@ -82,7 +65,6 @@ describe('Collections', function() {
 		var tw = Tweets.find(tweetId).fetch()[0];
 
 		expect(tw.activityNotify).toEqual(activityNotify);
-		expect(tw.getLink()).toEqual(link);
 		expect(tw.activityObject()).toEqual(tw);
 		expect(tw.activityForeignId()).toEqual(tweetId);
 		expect(tw.activityActor()).toEqual('users:' + userId);
@@ -111,6 +93,7 @@ describe("Stream.Backend", function() {
 	it('has methods', function() {
 		expect(backend.collectReferences).toBeDefined();
 		expect(backend.enrichActivities).toBeDefined();
+		expect(backend.enrichActivity).toBeDefined();
 		expect(backend.enrichAggregatedActivities).toBeDefined();
 	});
 
@@ -210,7 +193,7 @@ describe("Stream.Backend", function() {
 		expect(secondAggregation['activities'][0].verb).toBeDefined();
 	});
 
-	it('enrich aggreagted activity', function() {
+	it('enrich aggregated activity', function() {
 		var tweet = Tweets.findOne(Tweets.insert({
 			text: 'test',
 			actor: userId
@@ -232,7 +215,7 @@ describe("Stream.Backend", function() {
 		expect(enriched[0]['activities'][0].verb).toBeDefined();
 	});
 
-	it('to populate custom fields', function() {
+	it('to populate extra data', function() {
 		var tweetId = Tweets.insert({
 				'text': 'test',
 				'bg': 'bgvalue',
@@ -250,7 +233,8 @@ describe("Stream.Backend", function() {
 		var enriched = backend.enrichActivities([activity]);
 
 		expect(enriched.length).toEqual(1);
-		expect(enriched[0].object.link).toEqual(link);
+		expect(enriched[0].bg).toEqual('bgvalue');
+		expect(enriched[0].link).toEqual(link);
 	});
 
 	it('to serialize custom fields', function() {
@@ -325,7 +309,7 @@ xdescribe("Stream.ActivityCollection", function() {
 			'actor': this.user,
 		});
 
-		expect(StreamfeedManagerfeedmanager.activitycreated).toHaveBeenCalled();
+		expect(Stream.feedManager.activitycreated).toHaveBeenCalled();
 	});
 
 	it("calls activityDeleted feedManager the feedmanager after deletion", function() {
@@ -335,24 +319,8 @@ xdescribe("Stream.ActivityCollection", function() {
 
 		Tweets.remove(tweetId);
 
-		expect(StreamfeedManagerfeedmanager.activitydeleted).toHaveBeenCalled();
+		expect(Stream.feedManager.activitydeleted).toHaveBeenCalled();
 	});
-
-	it('only calls populate once', function() {
-		var tweetId = Tweets.insert({
-				text: 'test',
-				link: linkId,
-			}),
-			tweet = Tweets.findOne(tweetId);
-
-		spyOn(tweet, 'getLink');
-
-		tweet.populate();
-		tweet.populate();
-
-		expect(tweet.getLink.calls.count()).toEqual(1);
-	});
-
 });
 
 describe('Stream.activity', function() {
@@ -363,10 +331,6 @@ describe('Stream.activity', function() {
 	beforeEach(function() {
 		spyOn(Stream.feedManager, 'activityCreated');
 		spyOn(Stream.feedManager, 'activityDeleted');
-	});
-
-	it('should follow model reference naming convention', function() {
-
 	});
 
 	it('check to target field', function() {

@@ -1,0 +1,2 @@
+- Add tests to check if publications are created
+- Publish the correct collection records when a new activity is pushed to a feed

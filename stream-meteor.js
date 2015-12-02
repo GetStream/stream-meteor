@@ -35,4 +35,6 @@ if(Meteor.settings.newsFeeds) {
   settings['newsFeeds'] = Meteor.settings.newsFeeds;
 }
 
+Stream._settings = settings;
+
 Stream.feedManager = new FeedManager(settings);

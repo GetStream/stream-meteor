@@ -23,6 +23,7 @@ Package.onUse(function(api) {
                 'src/collections.js',
                 'src/activity.js',
                 'src/backend.js',]);
+  api.addFiles('src/server/publish.js', 'server');
 });
 
 Package.onTest(function(api) {

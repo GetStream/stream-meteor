@@ -44,3 +44,31 @@ Stream.registerActivity = function(collection, activityDocProps) {
   return collection;
 };
 
+Stream.feeds = {};
+
+var feeds = _(Stream._settings.newsFeeds).pairs();
+
+feeds.push(['flat', Stream._settings.userFeed]);
+feeds.push(['notification', Stream._settings.notificationFeed]);
+
+_(feeds).each(([feedType, feedGroup]) => {
+
+  Stream.feeds[feedGroup] = new Mongo.Collection(`Stream.feed.${feedGroup}`, {
+    transform: function(doc) {
+      if(feedType === 'aggregated') {
+        Stream.backend.enrichAggregatedActivities([doc]);
+
+        return doc;
+      } else if(feedType === 'notification') {
+        Stream.backend.enrichActivities(doc.activities);
+
+        return doc;
+      } else /* flat feed */ {
+        Stream.backend.enrichActivity(doc);
+
+        return doc;
+      }
+    }
+  });
+
+});

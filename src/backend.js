@@ -103,19 +103,25 @@ StreamBackend.prototype = {
 
     self.iterActivityFieldsWithReferences(activities, function(args) {
       if (objects[args.modelRef] && objects[args.modelRef][args.instanceRef] && args.field !== 'foreign_id') {
-        args.activity[args.field] = self.populate(objects[args.modelRef][args.instanceRef]);
+        args.activity[args.field] = objects[args.modelRef][args.instanceRef];
       }
     });
 
     return activities;
   },
 
-  populate: function(object) {
-    if (_.isFunction(object.populate)) {
-      object.populate();
-    }
+  enrichActivity: function(activity) {
+    var self = this;
+    var references = this.collectReferences([activity]);
+    var objects = this.retreiveObjects(references);
 
-    return object;
+    self.iterActivityFieldsWithReferences([activity], function(args) {
+      if (objects[args.modelRef] && objects[args.modelRef][args.instanceRef] && args.field !== 'foreign_id') {
+        args.activity[args.field] = objects[args.modelRef][args.instanceRef];
+      }
+    });
+
+    return activity;
   },
 
   getClassFromRef: function(ref) {

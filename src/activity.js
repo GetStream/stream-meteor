@@ -61,8 +61,4 @@ BaseActivity = {
   getStreamBackend() {
     return new Stream.Backend();
   },
-
-  populate() {
-    // override
-  },
 };
