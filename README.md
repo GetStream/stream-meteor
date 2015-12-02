@@ -42,7 +42,7 @@ Read more about how to use a settings.json file at the [Meteor Chef](https://the
 
 ## Background
 
-The architecture of this meteor package is based on the concepts portrayed in this [article](http://www.meteorimpact.io/content/patterns/timeline.html) read it to get a better understanding of the difficulties that arise when implementing news feeds in Meteor.
+The architecture of this meteor package is based on the concepts portrayed in this [article](http://www.meteorimpact.io/content/patterns/timeline.html), read it to get a better understanding of the difficulties that arise when implementing news feeds in Meteor.
 
 This Meteor integration package is divided into two separate parts. The first is the part responsible for publishing feeds so you can retrieve activities for specific feeds on your clients (see section *Publications*). The second is responsible for automatically creating activities on the getstream.io API when an item is added to an (activity) Collection (see section *Collection integration*).
 
@@ -292,6 +292,4 @@ To run the tests first install the velocity-cli:
 npm install -g velocity-cli
 ```
 
-Then run ``velocity test-packages`` from the package directory. The test page is now served at ``http://localhost:3000``.
-
-To run the (server) tests from the command line use velocity's ``--ci`` command line option.
+Then run ``velocity test-packages --settings test/settings.json`` from the package directory. The test page is now served at ``http://localhost:3000``.
