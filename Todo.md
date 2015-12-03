@@ -1,3 +1,2 @@
 - Add tests to check if publications are created
-- Publish the correct collection records when a new activity is pushed to a feed
 - Do not allow subscription to any feed_id (somehow let the user define how to restrict access)

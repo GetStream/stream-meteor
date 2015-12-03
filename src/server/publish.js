@@ -1,6 +1,27 @@
 function publish(name, getFeed, collectReferences, getParams={}) {
+	var publication;
+
+	function streamSubscriptionHandle(data) {
+		var refs = collectReferences(data.new);
+
+		_(refs).each((ids, model) => {
+			var collection = Mongo.Collection.get(model);
+
+			if(! collection instanceof Mongo.Collection) {
+		        throw new Meteor.Error('non-collection', `couldn\'t find collection with name ${ref}`);
+			}
+
+			_(ids).each((id) => publication.added(model, id, collection.findOne(id)));
+		});
+
+		_(data.new).each(activity => publication.added(name, activity.id, activity));
+		_(data.deleted).each(activity => publication.removed(name, activity.id));
+
+		publication.ready();
+	}
+
 	Meteor.publish(name, function(limit=20, userId=undefined /* subscribe params */) {
-		var publication = this;
+		publication = this;
 
 		if (!this.userId) {
 		  throw new Meteor.Error('not-authorized', 'You can only subscribe to feeds when authenticated');
@@ -31,13 +52,8 @@ function publish(name, getFeed, collectReferences, getParams={}) {
 			cursors.push(collection.find({ _id: { $in: ids } }));
 		});
 
-		var streamSubscription = streamFeed.subscribe(function(data) {
-			console.log('NAME:', name);
-			console.log('received real-time data from getstream', data);
-
-			_(data.new).each(activity => publication.added(name, activity.id, activity));
-			_(data.deleted).each(activity => publication.removed(name, activity.id));
-		});
+		var boundStreamSubscriptionHandle = Meteor.bindEnvironment(streamSubscriptionHandle);
+		var streamSubscription = streamFeed.subscribe(boundStreamSubscriptionHandle);
 
 		this.onStop(function() {
 			streamSubscription.cancel();
