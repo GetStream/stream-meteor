@@ -1,0 +1,11 @@
+================
+ Change history
+================
+
+0.2.2
+=====
+:release-date: 03-12-2015 
+:by: Matthisk Heimensen
+
+* Added: feed publications now add correct records on live updates received from getstream.io API
+
