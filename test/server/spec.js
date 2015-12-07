@@ -69,6 +69,12 @@ describe('Collections', function() {
 		expect(tw.activityForeignId()).toEqual(tweetId);
 		expect(tw.activityActor()).toEqual('users:' + userId);
 	});
+
+	it('throws error on activity register without verb', function() {
+		expect(function() {
+			Stream.registerActivity(Tweets, {});
+		}).toThrow();
+	});
 });
 
 describe("Stream.Backend", function() {

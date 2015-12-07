@@ -84,7 +84,8 @@ StreamBackend.prototype = {
 
       for(let id of refs) {
         if(! _.findWhere(objectsForRefs, {_id: id})) {
-          throw new Meteor.Error('not-enrichable', `Collection with name ${modelRef} does not contain item with id ${id}`);
+          throw new Meteor.Error('not-enrichable', `Collection with name ${modelRef} does not contain item with id ${id}
+hint: are you retrieving objects before the (feed) subscription is ready`);
         }
       }
 

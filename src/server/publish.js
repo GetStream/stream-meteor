@@ -91,8 +91,8 @@ _(Stream._settings.newsFeeds).each((feedGroup, feedType) => {
 		collect = aggregatedCollectReferences;
 	}
 
-	publish(`Stream.feed.${feedGroup}`, _.partial(getNewsFeed, feedGroup), collect);	
+	publish(`Stream.feeds.${feedGroup}`, _.partial(getNewsFeed, feedGroup), collect);	
 });
 
-publish('Stream.feed.notification', getNotificationFeed, aggregatedCollectReferences);
-publish('Stream.feed.user', getUserFeed, Stream.backend.collectReferences.bind(Stream.backend));
+publish('Stream.feeds.notification', getNotificationFeed, aggregatedCollectReferences);
+publish('Stream.feeds.user', getUserFeed, Stream.backend.collectReferences.bind(Stream.backend));

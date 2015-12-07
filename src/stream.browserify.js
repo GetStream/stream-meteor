@@ -1,1 +1,0 @@
-Stream.stream = require('getstream');

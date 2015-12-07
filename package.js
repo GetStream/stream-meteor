@@ -1,18 +1,19 @@
 Package.describe({
   name: 'getstream:stream-meteor',
-  version: '0.2.2',
+  version: '0.3.0',
   summary: 'Getstream.io integration package for Meteor',
   git: 'https://github.com/GetStream/stream-meteor',
   documentation: 'README.md',
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.2.1');
+  api.versionsFrom('1.0');
   api.use('ecmascript');
   api.use(['underscore', 'mongo']);
   api.use('matb33:collection-hooks@0.7.15');
   api.use('dburles:mongo-collection-instances@0.3.4');
   api.use('getstream:bin-deps@0.1.1');
+  api.use('check');
 
   api.export('Stream');
   api.addFiles('src/namespace.js');

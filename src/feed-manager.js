@@ -17,6 +17,15 @@ if(Meteor.isServer) {
   };
 }
 
+function handleError(err) {
+  if(err.error) {
+    console.error('[Feed Manager]: Stream.io API returned non 2** statuscode: ', err.error.status_code, 
+                '\n                with error:',  err.error.detail);
+  } else {
+    console.error('[Feed Manager]: Something went wrong during activity creation\n', err);
+  } 
+}
+
 FeedManager = function () {
   this.initialize.apply(this, arguments);
 };
@@ -114,9 +123,8 @@ FeedManager.prototype = {
       var feedType = instance.activityActorFeed() || this.settings.userFeed;
       var userId = backend.getIdFromRef(activity.actor);
       feed = this.getFeed(feedType, userId);
-      feed.addActivity(activity, function(err, response, body) {
-        if (err) console.log('err: ', err);
-      });
+      return feed.addActivity(activity)
+        .catch(handleError);
     }
   },
 
@@ -128,9 +136,8 @@ FeedManager.prototype = {
       var feedType = instance.activityActorFeed() || this.settings.userFeed;
       var userId = backend.getIdFromRef(activity.actor);
       feed = this.getFeed(feedType, userId);
-      feed.removeActivity({'foreignId': activity.foreign_id}, function(err, response, body) {
-        if (err) console.log('err: ', err);
-      });
+      return feed.removeActivity({'foreignId': activity.foreign_id})
+        .catch(handleError);
     }
   }
 

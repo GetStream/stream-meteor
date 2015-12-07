@@ -2,6 +2,16 @@
  Change history
 ================
 
+0.3.0
+=====
+:release-date: 07-12-2015
+:by: Matthisk Heimensen
+
+* BREAKING: Publish on Stream.feeds.*feedGroup* instead of Stream.feed.*feedGroup* to keep naming consistent
+  with the synthesized collections used to store feed data
+* Check registerActivity's inputs for correct values
+* Compatible with Meteor version 1.0.0+
+
 0.2.2
 =====
 :release-date: 03-12-2015 

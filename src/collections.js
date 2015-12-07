@@ -1,4 +1,8 @@
 Stream.registerActivity = function(collection, activityDocProps) {
+  check(activityDocProps, Match.ObjectIncluding({
+    activityVerb: String
+  }));
+
   var transform = function Document(doc) {
     var base = _.extend(_.clone(BaseActivity), {
       getCollectionName: () => collection._name,
@@ -53,7 +57,7 @@ feeds.push(['notification', Stream._settings.notificationFeed]);
 
 _(feeds).each(([feedType, feedGroup]) => {
 
-  Stream.feeds[feedGroup] = new Mongo.Collection(`Stream.feed.${feedGroup}`, {
+  Stream.feeds[feedGroup] = new Mongo.Collection(`Stream.feeds.${feedGroup}`, {
     transform: function(doc) {
       if(feedType === 'aggregated') {
         Stream.backend.enrichAggregatedActivities([doc]);
