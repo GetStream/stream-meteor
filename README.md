@@ -46,6 +46,26 @@ The architecture of this meteor package is based on the concepts portrayed in th
 
 This Meteor integration package is divided into two separate parts. The first is the part responsible for publishing feeds so you can retrieve activities for specific feeds on your clients (see section *Publications*). The second is responsible for automatically creating activities on the getstream.io API when an item is added to an (activity) Collection (see section *Collection integration*).
 
+## Settings
+
+The following keys can be configured in your Meteor.settings:
+
+* **streamApiSecret** the secret key for your getstream app
+* **streamApiKey** the api key for your getstream app
+* **streamApiAppId** the api app id for your getstream app
+
+* **userFeed** the name of the user feed group, defaults to 'user'
+* **notificationFeed** the name of the notification feed group, defaults to 'notification'
+* **newsFeeds** the news feed groups available defaults to, where property is a feed type and the value is the name of the feed group with that type:
+```js
+{
+    flat: "flat",
+    aggregated: "aggregated"
+}
+```
+
+Read more about using these feeds in the section *FeedManager*
+
 ## Publications
 
 This package automatically creates publications for the news feed groups you have defined in your settings file (or the feed groups defined by default). All publications are namespaced starting with 'Stream.feeds' followed by the name of the feed group, so for feed group 'user' we can subscribe to publication 'Stream.feeds.user'. The publication can handle two parameters, the first is the limit on how many activities to retrieve from the feed (defaults to twenty). And the second is the id of the feed to retrieve from the feed group (defaults to the current user's id). So the following code subscribes to feed with id 'some-feed-id' on feed group 'user' with a limit of 10 activities:
