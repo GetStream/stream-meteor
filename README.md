@@ -53,7 +53,6 @@ The following keys can be configured in your Meteor.settings:
 * **streamApiSecret** the secret key for your getstream app
 * **streamApiKey** the api key for your getstream app
 * **streamApiAppId** the api app id for your getstream app
-
 * **userFeed** the name of the user feed group, defaults to 'user'
 * **notificationFeed** the name of the notification feed group, defaults to 'notification'
 * **newsFeeds** the news feed groups available defaults to, where property is a feed type and the value is the name of the feed group with that type:
