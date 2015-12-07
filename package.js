@@ -8,12 +8,12 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.0');
-  api.use('ecmascript');
+  api.use('ecmascript@0.1.6');
   api.use(['underscore', 'mongo']);
   api.use('matb33:collection-hooks@0.7.15');
   api.use('dburles:mongo-collection-instances@0.3.4');
   api.use('getstream:bin-deps@0.1.1');
-  api.use('check');
+  api.use('check@1.1.0');
 
   api.export('Stream');
   api.addFiles('src/namespace.js');
