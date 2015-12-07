@@ -59,7 +59,7 @@ A publication stores it values in an 'synthetic' collection on ``Stream.feeds`` 
 ```js
 Router.route('/flat', {
   waitOn: function() {
-    return Meteor.subscribe('Stream.feed.user');
+    return Meteor.subscribe('Stream.feeds.user');
   },
 
   action: function() {
@@ -76,7 +76,7 @@ Or inside a template onCreated handler:
 Template.someTemplate.onCreated(function() {
   
   this.autorun(function() {
-    var subscription = Meteor.subscribe('Stream.feed.user');
+    var subscription = Meteor.subscribe('Stream.feeds.user');
 
     if(subscription.ready()) {
       var enrichedActivities = Stream.feeds.user.find().fetch();
