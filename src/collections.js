@@ -1,6 +1,6 @@
 Stream.registerActivity = function(collection, activityDocProps) {
   check(activityDocProps, Match.ObjectIncluding({
-    activityVerb: String
+    activityVerb: Match.OneOf(String, Function)
   }));
 
   var transform = function Document(doc) {

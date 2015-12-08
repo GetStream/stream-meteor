@@ -379,6 +379,27 @@ describe('Stream.activity', function() {
 		expect(activity.object).toBe(tweet);
 	});
 
+	it('#createActivity() with activityVerb function', function() {
+		var Activities = new Mongo.Collection('activities');
+
+		Stream.registerActivity(Activities, {
+			activityVerb: function() {
+				return this.verb;
+			}
+		});
+
+		var id = Activities.insert({
+			text: 'some-text',
+			verb: 'tweet',
+			actor: '1'
+		});
+
+		var tweet = Activities.findOne(id),
+			activity = tweet.createActivity();
+
+		expect(activity.verb).toBe('tweet');
+	});
+
 	it('#createActivity().activityActor', function() {
 		var tweetId = Tweets.insert({
 			actor: userId
