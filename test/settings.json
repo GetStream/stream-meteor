@@ -4,6 +4,12 @@
   "public" : {
     "streamApiKey": "test",
 
+	"newsFeeds": {
+		"flat": "flat",
+		"aggregated": "aggregated",
+		"topic": "flat"
+	},
+
     "streamApiAppId": "test"
   }
 }

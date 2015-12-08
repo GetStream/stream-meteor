@@ -142,3 +142,5 @@ FeedManager.prototype = {
   }
 
 };
+
+Stream.feedManager = new FeedManager(Stream._settings);

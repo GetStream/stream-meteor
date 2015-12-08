@@ -84,7 +84,7 @@ function aggregatedCollectReferences(aggregated) {
 	return Stream.backend.collectReferences(aggregated);
 }
 
-_(Stream._settings.newsFeeds).each((feedGroup, feedType) => {
+_(Stream._settings.newsFeeds).each((feedType, feedGroup) => {
 	var collect = Stream.backend.collectReferences.bind(Stream.backend);
 
 	if(feedType === 'aggregated') {

@@ -55,13 +55,16 @@ The following keys can be configured in your Meteor.settings:
 * **streamApiAppId** the api app id for your getstream app
 * **userFeed** the name of the user feed group, defaults to 'user'
 * **notificationFeed** the name of the notification feed group, defaults to 'notification'
-* **newsFeeds** the news feed groups available defaults to, where property is a feed type and the value is the name of the feed group with that type:
+* **newsFeeds** the newsfeed groups available defaults to, where property is a feed group and the value is the feed type:
 ```js
 {
-    flat: "flat",
-    aggregated: "aggregated"
+    "flat": "flat",
+    "aggregated": "aggregated"
 }
 ```
+
+Be sure to set the **userFeed**, **notificationFeed**, and **newsFeeds** on the public Meteor settings, this way you can also
+use the FeedManager on the client.
 
 Read more about using these feeds in the section *FeedManager*
 

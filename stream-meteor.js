@@ -21,12 +21,24 @@ if (Meteor.isServer) {
   settings['apiSecret'] = Meteor.settings.streamApiSecret;
 }
 
+if(Meteor.settings.public.userFeed) {
+  settings['userFeed'] = Meteor.settings.public.userFeed;
+}
+
 if(Meteor.settings.userFeed) {
   settings['userFeed'] = Meteor.settings.userFeed;
 }
 
+if(Meteor.settings.public.notificationFeed) {
+  settings['notificationFeed'] = Meteor.settings.public.notificationFeed;
+}
+
 if(Meteor.settings.notificationFeed) {
   settings['notificationFeed'] = Meteor.settings.notificationFeed;
+}
+
+if(Meteor.settings.public.newsFeeds) {
+  settings['newsFeeds'] = Meteor.settings.public.newsFeeds;
 }
 
 if(Meteor.settings.newsFeeds) {
@@ -34,5 +46,3 @@ if(Meteor.settings.newsFeeds) {
 }
 
 Stream._settings = settings;
-
-Stream.feedManager = new FeedManager(settings);

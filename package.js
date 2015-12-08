@@ -19,12 +19,12 @@ Package.onUse(function(api) {
   api.addFiles('src/namespace.js');
   api.addFiles('src/client/namespace.js', 'client');
   api.addFiles('src/server/namespace.js', 'server');
-  api.addFiles(['config/getstream.js',
-                'src/feed-manager.js',
+  api.addFiles(['config/getstream.js', 
                 'stream-meteor.js',
+                'src/feed-manager.js',
                 'src/collections.js',
                 'src/activity.js',
-                'src/backend.js',]);
+                'src/backend.js']);
   api.addFiles('src/server/publish.js', 'server');
 });
 

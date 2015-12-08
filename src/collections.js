@@ -52,10 +52,10 @@ Stream.feeds = {};
 
 var feeds = _(Stream._settings.newsFeeds).pairs();
 
-feeds.push(['flat', Stream._settings.userFeed]);
-feeds.push(['notification', Stream._settings.notificationFeed]);
+feeds.push([Stream._settings.userFeed, 'flat']);
+feeds.push([Stream._settings.notificationFeed, 'notification']);
 
-_(feeds).each(([feedType, feedGroup]) => {
+_(feeds).each(([feedGroup, feedType]) => {
 
   Stream.feeds[feedGroup] = new Mongo.Collection(`Stream.feeds.${feedGroup}`, {
     transform: function(doc) {

@@ -11,4 +11,7 @@ describe("Stream.feeds", function() {
 	it("#aggregated", function() {
 		expect(Stream.feeds.aggregated instanceof Mongo.Collection).toBe(true);
 	});
+	it("#topic", function() {
+		expect(Stream.feeds.topic instanceof Mongo.Collection).toBe(true);
+	});
 });
