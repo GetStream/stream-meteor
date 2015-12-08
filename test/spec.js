@@ -15,3 +15,17 @@ describe("Stream.feeds", function() {
 		expect(Stream.feeds.topic instanceof Mongo.Collection).toBe(true);
 	});
 });
+
+describe("Stream.feedManager", function() {
+	beforeEach(function() {
+		spyOn(Stream.feedManager.client, 'feed').and.returnValue({});
+	});
+
+	it("#getNewsFeeds", function() {
+		var newsFeeds = Stream.feedManager.getNewsFeeds('some-id');
+
+		expect(newsFeeds.flat).toBeDefined();
+		expect(newsFeeds.aggregated).toBeDefined();
+		expect(newsFeeds.topic).toBeDefined();
+	});
+});

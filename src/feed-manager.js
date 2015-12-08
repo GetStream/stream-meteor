@@ -77,10 +77,7 @@ FeedManager.prototype = {
     feeds = [];
     newsFeeds = this.settings.newsFeeds;
 
-    for (key in newsFeeds) {
-      slug = newsFeeds[key];
-      feeds[slug] = this.client.feed(slug, userId, token);
-    }
+    _(newsFeeds).each((feedType, feedGroup) => feeds[feedGroup] = this.client.feed(feedGroup, userId, token));
 
     return feeds;
   },
@@ -92,7 +89,7 @@ FeedManager.prototype = {
       feeds[feed] = feeds[feed].token;
     }
 
-  return feeds;
+    return feeds;
   },
 
   followUser: function(userId, targetUserId) {
