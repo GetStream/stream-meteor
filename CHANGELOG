@@ -4,7 +4,7 @@
 
 0.3.1
 =====
-:release-date: 07-12-2015
+:release-date: 08-12-2015
 :by: Matthisk Heimensen
 
 * activityVerb can be either a string or a function returning a string
