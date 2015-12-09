@@ -208,6 +208,15 @@ The enriched activity will have a property with a reference to our item document
 * **activityActorProp** which property holds the user id of current activity's actor
 * **activityExtraData** extra data set on the activity object that is send to the getstream API
 
+**activityNotify** should be a function returning a list of feeds retrieved from the FeedManager, so for example:
+
+```js
+  activityNotify: function() {
+      targetFeed = Stream.feedManager.getNotificationFeed(this.target);
+      return [targetFeed];
+  },
+```
+
 ## Feed manager
 
 This packages comes with a FeedManager class that helps with all common feed operations. This class can be accessed from both the client and the server, to use the FeedManager on the client consult the section *Using feed manager on the client*. 
