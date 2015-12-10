@@ -15,7 +15,8 @@ function publish(name, getFeed, collectReferences, getParams={}) {
 		});
 
 		_(data.new).each(activity => publication.added(name, activity.id, activity));
-		_(data.deleted).each(activity => publication.removed(name, activity.id));
+
+		_(data.deleted).each(activityId => publication.removed(name, activityId));
 
 		publication.ready();
 	}
