@@ -64,7 +64,7 @@ The following keys can be configured in your Meteor.settings:
 ```
 
 Be sure to set the **userFeed**, **notificationFeed**, and **newsFeeds** on the public Meteor settings, this way you can also
-use the FeedManager on the client.
+use the FeedManager on the client and the correct Collections can be setup on the client.
 
 Read more about using these feeds in the section *FeedManager*
 
