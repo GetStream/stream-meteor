@@ -6,7 +6,13 @@ StreamBackend.prototype = {
       return false;
     }
 
-    return (typeof (value) === 'string' && value.split(':').length === 2);
+    if(typeof value === 'string' && value.split(':').length === 2) {
+      var ref = value.split(':')[0];
+      var collection = Mongo.Collection.get(ref);
+      return collection && collection instanceof Mongo.Collection;
+    }
+
+    return false;
   },
 
   iterActivityFields: function(activities, filter, fn) {
