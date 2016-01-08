@@ -2,6 +2,13 @@
  Change history
 ================
 
+0.3.6
+=====
+:release-date: 08-01-2016
+:by: Matthisk Heimensen
+
+* Fixed: set publication status to ready when no userId is supplied to supply Stream feed for
+
 
 0.3.3
 =====
