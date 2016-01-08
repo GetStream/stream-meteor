@@ -22,7 +22,12 @@ function publish(name, getFeed, collectReferences, getParams={}) {
 	}
 
 	Meteor.publish(name, function(limit=20, userId=undefined /* subscribe params */) {
+		userId = userId || this.userId;
 		publication = this;
+
+		if(! userId) {
+			return publication.ready();
+		}
 
 		if (!this.userId) {
 		  throw new Meteor.Error('not-authorized', 'You can only subscribe to feeds when authenticated');
@@ -32,7 +37,7 @@ function publish(name, getFeed, collectReferences, getParams={}) {
 			limit: limit
 		});
 
-		var streamFeed = getFeed(userId || this.userId),
+		var streamFeed = getFeed(userId),
 			feed = Stream.await(streamFeed.get(getParams)),
 		    activities = feed.results;
 
