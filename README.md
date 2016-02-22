@@ -310,8 +310,7 @@ When you read data from feeds, a like activity will look like this:
 This is far from ready for usage in your template. We call the process of loading the references from the database enrichment. Collections created by feed publications (see section *Publications*) handle this enrichment when they are fetched automatically.
 
 ## Low level APIs access
-When needed you can also use the low level JS API directly.
-The full explanation can be found in the [getstream.io documentation](https://getstream.io/docs/).
+When needed you can also use the low level JS API directly. ``Stream.stream`` exposes the [low-level javascript client](https://github.com/getstream/stream-js) on the server. If you want to access an instance of the client directly use ``Stream.feedManager.client``. For more information on how to use the low-level javascript client visit the [getstream.io documentation](https://getstream.io/docs/).
 
 ## Contributing
 
