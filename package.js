@@ -6,18 +6,23 @@ Package.describe({
   documentation: 'README.md',
 });
 
+Npm.depends({
+  'getstream': '3.1.2',
+  'fibers': '1.0.8',
+});
+
 Package.onUse(function(api) {
   api.versionsFrom('1.0');
   api.use('ecmascript@0.1.6');
+  api.use(['cosmos:browserify@0.10.0'], 'client');
   api.use(['underscore', 'mongo']);
   api.use('matb33:collection-hooks@0.7.15');
   api.use('dburles:mongo-collection-instances@0.3.4');
-  api.use('getstream:bin-deps@0.1.1');
   api.use('check@1.1.0');
 
   api.export('Stream');
   api.addFiles('src/namespace.js');
-  api.addFiles('src/client/namespace.js', 'client');
+  api.addFiles('src/client.browserify.js', 'client');
   api.addFiles('src/server/namespace.js', 'server');
   api.addFiles(['config/getstream.js', 
                 'stream-meteor.js',

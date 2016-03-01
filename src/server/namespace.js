@@ -1,2 +1,2 @@
-Stream.Future = StreamBinDeps.Future;
-Stream.stream = StreamBinDeps.stream;
+Stream.Future = Npm.require('fibers/future');
+Stream.stream = Npm.require('getstream');
