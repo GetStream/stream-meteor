@@ -1,6 +1,6 @@
 Package.describe({
   name: 'getstream:stream-meteor',
-  version: '0.3.7',
+  version: '0.4.0',
   summary: 'Getstream.io integration package for Meteor',
   git: 'https://github.com/GetStream/stream-meteor',
   documentation: 'README.md',
