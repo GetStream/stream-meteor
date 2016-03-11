@@ -69,6 +69,10 @@ FeedManager.prototype = {
     return this.client.feed(this.settings.notificationFeed, userId, token);
   },
 
+  getNotificationFeedStats: function(userId) {
+    return Stream.notifications.findOne({ feedGroup: this.settings.notificationFeed, feedId: userId || Meteor.userId() });
+  },
+
   getNotificationFeedToken: function(userId) {
     return this.client.feed(this.settings.notificationFeed, userId).token;
   },

@@ -14,6 +14,9 @@ describe("Stream.feeds", function() {
 	it("#topic", function() {
 		expect(Stream.feeds.topic instanceof Mongo.Collection).toBe(true);
 	});
+	it("#notifications", function() {
+		expect(Stream.notifications instanceof Mongo.Collection).toBe(true);
+	});
 });
 
 describe("Stream.feedManager", function() {

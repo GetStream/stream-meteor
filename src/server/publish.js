@@ -1,7 +1,6 @@
-function publish(name, getFeed, collectReferences, getParams={}) {
-	var publication;
+function streamSubscriptionHandleFactory(name, collectReferences, publication, streamFeed) {
 
-	function streamSubscriptionHandle(data) {
+	return function streamSubscriptionHandle(data) {
 		var refs = collectReferences(data.new);
 
 		_(refs).each((ids, model) => {
@@ -18,12 +17,26 @@ function publish(name, getFeed, collectReferences, getParams={}) {
 
 		_(data.deleted).each(activityId => publication.removed(name, activityId));
 
-		publication.ready();
-	}
+		if (data.unread && data.unseen) {
+			let notification = Stream.notifications.findOne({ feedGroup: streamFeed.slug, feedId: streamFeed.userId });
 
+			if (notification) {
+				publication.changed('Stream.notifications', notification._id, { unread: data.unread, unseen: data.unseen });
+			}
+		}
+
+		publication.ready();
+	};
+
+}
+
+function publish(name, getFeed, collectReferences, getParams={}) {
 	Meteor.publish(name, function(limit=20, userId=undefined /* subscribe params */) {
+		var publication = this;
+		var streamFeed;
+		var cursors = [];
+
 		userId = userId || this.userId;
-		publication = this;
 
 		if(! userId) {
 			return publication.ready();
@@ -37,16 +50,29 @@ function publish(name, getFeed, collectReferences, getParams={}) {
 			limit: limit
 		});
 
-		var streamFeed = getFeed(userId),
-			feed = Stream.await(streamFeed.get(getParams)),
+		streamFeed = getFeed(userId);
+
+		var	feed = Stream.await(streamFeed.get(getParams)),
 		    activities = feed.results;
+
+		var feedSelector = { feedGroup: streamFeed.slug, feedId: streamFeed.userId }
+		  , dbFeed = Stream.notifications.findOne(feedSelector);
+
+		if (! dbFeed && feed.unread && feed.unseen) {
+			Stream.notifications.insert(_(feedSelector).extend({ unread: feed.unread, unseen: feed.unseen }));
+		} else if(feed.unread && feed.unseen) {
+			Stream.notifications.update(dbFeed._id, { $set: { unread: feed.unread, unseen: feed.unseen }});
+		}
+
+		if (feed.unread && feed.unseen) {
+			cursors.push(Stream.notifications.find(feedSelector));
+		}
 
 		activities.forEach(activity => {
 			publication.added(name, activity.id, activity);
 		});
 
 		var refs = collectReferences(activities);
-		var cursors = [];
 
 		_(refs).each((ids, model) => {
 			var collection = Mongo.Collection.get(model);
@@ -58,6 +84,7 @@ function publish(name, getFeed, collectReferences, getParams={}) {
 			cursors.push(collection.find({ _id: { $in: ids } }));
 		});
 
+		var streamSubscriptionHandle = streamSubscriptionHandleFactory(name, collectReferences, publication, streamFeed);
 		var boundStreamSubscriptionHandle = Meteor.bindEnvironment(streamSubscriptionHandle);
 		var streamSubscription = streamFeed.subscribe(boundStreamSubscriptionHandle);
 

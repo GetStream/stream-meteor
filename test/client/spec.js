@@ -14,6 +14,10 @@ describe('Stream.feedManager', function() {
 	it('#getNotificationFeed()', function() {
 		expect(typeof Stream.feedManager.getNotificationFeed).toEqual('function');
 	});
+
+	it("#getNotificationFeedStats", function() {
+		expect(typeof Stream.feedManager.getNotificationFeedStats).toEqual('function');
+	});
 });
 
 describe('Stream.backend', function() {
