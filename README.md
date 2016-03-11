@@ -247,9 +247,21 @@ The notification feed can be used to build notification functionality.
   <img src="http://feedly.readthedocs.org/en/latest/_images/fb_notification_system.png" alt="Notification feed" title="Notification feed"/>
 </p>
   
-```js
+```js 
 var notificationFeed = Stream.feedManager.getNotificationFeed(this.userId);
 ```
+
+Notification feeds are aggregated feeds that have two additional properties, a counter holding the amount of
+unread notifications and a counter holding the amount of unseen notifications. The Meteor library exposes these
+statistics on a Mongo collection under Stream.notifications, here you can query the amount of unread and unseen activities for any notification feed via ```{ feedGroup: 'FEED_GROUP_NAME', feedId: 'USER_ID' }```, the ```FeedManager``` also exposes a method called ```getNotificationFeedStats``` which can be used to retrieve the notification feed stats for your notification feed defined in ```settings.json```:
+
+```js
+var stats = Stream.feedManager.getNotificationFeedStats(this.userId);
+
+// Now you can access stats.unread and stats.unseen
+```
+
+These values will update reactive automatically when you are subsribed to the publication belonging to this notification feed.
 
 ### Follow a feed
 The create the newsfeeds you need to notify the system about follow relationships. The manager comes with APIs to let a user's news feeds follow another user's feed. This code lets the current user's flat and aggregated feeds follow the target_user's personal feed.

@@ -2,6 +2,15 @@
  Change history
 ================
 
+
+0.4.0
+=====
+:release-date: 11-03-2016
+:by: Matthisk Heimensen
+
+* Added: Retrieve unread and unseen status for notification feeds reactively via Stream.notifications
+         and Stream.feedManager.getNotificationFeedStats()
+
 0.3.7
 =====
 :release-date: 01-03-2016
