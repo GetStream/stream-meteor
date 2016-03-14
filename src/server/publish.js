@@ -19,8 +19,7 @@ function streamSubscriptionHandleFactory(name, collectReferences, publication, s
 
 		if ((data.unread != null) && (data.unseen != null)) {
 			let notification = Stream.notifications.findOne({ feedGroup: streamFeed.slug, feedId: streamFeed.userId });
-			// console.log("!!! notification", notification);
-			// console.log("!!! publication", publication);
+
 			if (notification) {
 				publication.changed('Stream.notifications', notification._id, { unread: data.unread, unseen: data.unseen });
 			}
