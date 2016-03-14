@@ -1,8 +1,8 @@
 Package.describe({
-  name: 'benmgreene:stream-meteor',
+  name: 'GetStream:stream-meteor',
   version: '0.4.0',
   summary: 'Getstream.io integration package for Meteor',
-  git: 'https://github.com/benmgreene/stream-meteor',
+  git: 'https://github.com/GetStream/stream-meteor',
   documentation: 'README.md',
 });
 
@@ -39,7 +39,7 @@ Package.onTest(function(api) {
   api.use(['underscore', 'mongo']);
   api.use('insecure');
   api.use('accounts-base');
-  api.use('benmgreene:stream-meteor');
+  api.use('GetStream:stream-meteor');
 
   api.addFiles('test/spec.js');
   api.addFiles('test/client/spec.js', ['client']);
