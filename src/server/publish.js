@@ -17,7 +17,7 @@ function streamSubscriptionHandleFactory(name, collectReferences, publication, s
 
 		_(data.deleted).each(activityId => publication.removed(name, activityId));
 
-		if (data.unread && data.unseen) {
+		if ((data.unread != null) && (data.unseen != null)) {
 			let notification = Stream.notifications.findOne({ feedGroup: streamFeed.slug, feedId: streamFeed.userId });
 
 			if (notification) {
@@ -58,13 +58,13 @@ function publish(name, getFeed, collectReferences, getParams={}) {
 		var feedSelector = { feedGroup: streamFeed.slug, feedId: streamFeed.userId }
 		  , dbFeed = Stream.notifications.findOne(feedSelector);
 
-		if (! dbFeed && feed.unread && feed.unseen) {
+		if (! dbFeed && (feed.unread != null) && (feed.unseen != null)) {
 			Stream.notifications.insert(_(feedSelector).extend({ unread: feed.unread, unseen: feed.unseen }));
-		} else if(feed.unread && feed.unseen) {
+		} else if((feed.unread != null) && (feed.unseen != null)) {
 			Stream.notifications.update(dbFeed._id, { $set: { unread: feed.unread, unseen: feed.unseen }});
 		}
 
-		if (feed.unread && feed.unseen) {
+		if ((feed.unread != null) && (feed.unseen != null)) {
 			cursors.push(Stream.notifications.find(feedSelector));
 		}
 
