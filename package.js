@@ -7,7 +7,7 @@ Package.describe({
 });
 
 Npm.depends({
-  'getstream': '3.1.2',
+  'getstream': '3.2.0',
   'fibers': '1.0.8',
 });
 
