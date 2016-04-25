@@ -30,6 +30,10 @@ function streamSubscriptionHandleFactory(name, collectReferences, publication, s
 
 }
 
+Stream.setPublishFields = function(publishFields) {
+  Stream.publishFields = publishFields;
+}
+
 function publish(name, getFeed, collectReferences, getParams={}) {
 	Meteor.publish(name, function(limit=20, userId=undefined /* subscribe params */) {
 		var publication = this;
@@ -126,6 +130,8 @@ _(Stream._settings.newsFeeds).each((feedType, feedGroup) => {
 		collect = aggregatedCollectReferences;
 	}
 
+	publish(`Stream.feeds.${feedGroup}`, _.partial(getNewsFeed, feedGroup), collect);
 });
 
 publish('Stream.feeds.notification', getNotificationFeed, aggregatedCollectReferences);
+publish('Stream.feeds.user', getUserFeed, Stream.backend.collectReferences.bind(Stream.backend));

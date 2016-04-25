@@ -48,10 +48,6 @@ Stream.registerActivity = function(collection, activityDocProps) {
   return collection;
 };
 
-Stream.setPublishFields = function(publishFields) {
-  Stream.publishFields = publishFields;
-}
-
 Stream.feeds = {};
 
 var feeds = _(Stream._settings.newsFeeds).pairs();
