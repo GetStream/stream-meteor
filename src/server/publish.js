@@ -30,6 +30,10 @@ function streamSubscriptionHandleFactory(name, collectReferences, publication, s
 
 }
 
+Stream.setPublishFields = function(publishFields) {
+  Stream.publishFields = publishFields;
+}
+
 function publish(name, getFeed, collectReferences, getParams={}) {
 	Meteor.publish(name, function(limit=20, userId=undefined /* subscribe params */) {
 		var publication = this;
@@ -80,8 +84,10 @@ function publish(name, getFeed, collectReferences, getParams={}) {
 			if(! collection instanceof Mongo.Collection) {
 		        throw new Meteor.Error('non-collection', `couldn\'t find collection with name ${ref}`);
 			}
-
-			cursors.push(collection.find({ _id: { $in: ids } }));
+			if (Stream.publishFields && Stream.publishFields[model])
+				cursors.push(collection.find({ _id: { $in: ids } }, { fields: Stream.publishFields[model] }));
+			else
+				cursors.push(collection.find({ _id: { $in: ids } }));
 		});
 
 		var streamSubscriptionHandle = streamSubscriptionHandleFactory(name, collectReferences, publication, streamFeed);
@@ -124,7 +130,7 @@ _(Stream._settings.newsFeeds).each((feedType, feedGroup) => {
 		collect = aggregatedCollectReferences;
 	}
 
-	publish(`Stream.feeds.${feedGroup}`, _.partial(getNewsFeed, feedGroup), collect);	
+	publish(`Stream.feeds.${feedGroup}`, _.partial(getNewsFeed, feedGroup), collect);
 });
 
 publish('Stream.feeds.notification', getNotificationFeed, aggregatedCollectReferences);
