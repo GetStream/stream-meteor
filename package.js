@@ -1,13 +1,13 @@
 Package.describe({
   name: 'getstream:stream-meteor',
-  version: '0.4.2',
+  version: '0.4.3',
   summary: 'Getstream.io integration package for Meteor',
   git: 'https://github.com/GetStream/stream-meteor',
   documentation: 'README.md',
 });
 
 Npm.depends({
-  'getstream': '3.2.0',
+  'getstream': '3.4.1',
   'fibers': '1.0.8',
 });
 
