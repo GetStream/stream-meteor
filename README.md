@@ -335,3 +335,21 @@ npm install -g velocity-cli
 ```
 
 Then run ``velocity test-packages --settings test/settings.json`` from the package directory. The test page is now served at ``http://localhost:3000``.
+
+### Publishing package
+
+Update the version number in package.js and run:
+
+```
+meteor publish getstream:stream-meteor
+meteor publish-for-arch getstream:stream-meteor@NEW_VERSION
+```
+
+After this you still have to publish for other architectures you can get a machine on that architecture using:
+
+```
+meteor admin get-machine os.linux.x86_64
+meteor admin get-machine os.linux.x86_32
+```
+
+Somehow the publish on windows does not work (and never has)
