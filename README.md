@@ -1,6 +1,10 @@
 [![Build Status](https://travis-ci.org/GetStream/stream-meteor.svg)](https://travis-ci.org/GetStream/stream-meteor)
 
-This package helps you create activity streams & newsfeeds with MeteorJS and [GetStream.io](https://getstream.io).
+[stream-meteor](https://github.com/GetStream/stream-meteor) is a Meteor client for [Stream](https://getstream.io/).
+
+You can sign up for a Stream account at https://getstream.io/get_started.
+
+Note there is also a lower level [Node.js - Stream integration](https://github.com/getstream/stream-js) library which is suitable for all JavaScript applications.
 
 ## Build activity streams & news feeds
 
@@ -96,14 +100,14 @@ Or inside a template onCreated handler:
 
 ```js
 Template.someTemplate.onCreated(function() {
-  
+
   this.autorun(function() {
     var subscription = Meteor.subscribe('Stream.feeds.user');
 
     if(subscription.ready()) {
       var enrichedActivities = Stream.feeds.user.find().fetch();
 
-      // Do something with the enriched activities, normally you would store them in a 
+      // Do something with the enriched activities, normally you would store them in a
       // reactive variable and retrieve this var with a helper method in your template
     }
   });
@@ -171,7 +175,7 @@ Likes.insert({
 The item can not be automatically enriched on the client we only retrieve the Like document from MongoDB. Thus the activities object field wil reference:
 
 ```js
-{ 
+{
   //...
   object: /* our like document */
 }
@@ -219,20 +223,20 @@ The enriched activity will have a property with a reference to our item document
 
 ## Feed manager
 
-This packages comes with a FeedManager class that helps with all common feed operations. This class can be accessed from both the client and the server, to use the FeedManager on the client consult the section *Using feed manager on the client*. 
+This packages comes with a FeedManager class that helps with all common feed operations. This class can be accessed from both the client and the server, to use the FeedManager on the client consult the section *Using feed manager on the client*.
 
 ### Feeds bundled with feed_manager
 
 To get you started the manager has 4 feed groups pre configured. You can add more feeds if your application needs it. The feeds are divided in three categories.
 
 ### User feed:
-The user feed stores all activities for a user. Think of it as your personal Facebook page. You can easily get this feed from the manager.  
+The user feed stores all activities for a user. Think of it as your personal Facebook page. You can easily get this feed from the manager.
 ```js
 Stream.feedManager.getUserFeed(this.userId);
-```  
+```
 
 ### News feeds:
-The news feeds store the activities from the people you follow. 
+The news feeds store the activities from the people you follow.
 There is both a flat newsfeed (similar to twitter) and an aggregated newsfeed (like facebook).
 
 ```js
@@ -241,13 +245,13 @@ var aggregatedFeed = Stream.feedManager.getNewsFeeds(this.user)['aggregated'];
 ```
 
 ### Notification feed:
-The notification feed can be used to build notification functionality. 
+The notification feed can be used to build notification functionality.
 
 <p align="center">
   <img src="http://feedly.readthedocs.org/en/latest/_images/fb_notification_system.png" alt="Notification feed" title="Notification feed"/>
 </p>
-  
-```js 
+
+```js
 var notificationFeed = Stream.feedManager.getNotificationFeed(this.userId);
 ```
 
@@ -271,7 +275,7 @@ Stream.feedManager.followUser(userId, targetId);
 ```
 
 ### Using feed managers on the client
-The server has access to your getstream.io secret key, this makes it possible to edit feeds of any user. For obvious security reasons the client does not have access to all feeds, and to grant it access to the feed of the current user we need to generate a feed token. 
+The server has access to your getstream.io secret key, this makes it possible to edit feeds of any user. For obvious security reasons the client does not have access to all feeds, and to grant it access to the feed of the current user we need to generate a feed token.
 
 ```js
 var notificationFeedToken = Stream.feedManager.getNotificationFeedToken(this.userId);
@@ -286,7 +290,7 @@ if(Meteor.isServer) {
 			if(! this.userId) {
 				throw new Meteor.Error('not-authorized');
 			}
-			
+
 			return Stream.feedManager.getNotificationFeedToken(this.userId);
 		}
 	});
@@ -298,9 +302,9 @@ To subscribe to the notification feed on the client call the method and retrieve
 ```js
 Meteor.call('notificationFeedToken', function(err, token) {
 	if(err) console.error(err);
-	
+
 	var feed = Stream.feedManager.notificationFeed(Meteor.userId(), token);
-	
+
 	feed.subscribe(function(data) {
 		// Respond to data
 	});
@@ -321,8 +325,11 @@ When you read data from feeds, a like activity will look like this:
 
 This is far from ready for usage in your template. We call the process of loading the references from the database enrichment. Collections created by feed publications (see section *Publications*) handle this enrichment when they are fetched automatically.
 
-## Low level APIs access
-When needed you can also use the low level JS API directly. ``Stream.stream`` exposes the [low-level javascript client](https://github.com/getstream/stream-js) on the server. If you want to access an instance of the client directly use ``Stream.feedManager.client``. For more information on how to use the low-level javascript client visit the [getstream.io documentation](https://getstream.io/docs/).
+### Full documentation and Low level APIs access
+
+When needed you can also use the [low level JavaScript API](https://github.com/getstream/stream-js) directly. Documentation is available at the [Stream website](https://getstream.io/docs/?language=js).
+
+If you want to access an instance of the client directly use ``Stream.feedManager.client``.
 
 ## Contributing
 
@@ -353,3 +360,9 @@ meteor admin get-machine os.linux.x86_32
 ```
 
 Somehow the publish on windows does not work (and never has)
+
+### Copyright and License Information
+
+Copyright (c) 2014-2017 Stream.io Inc, and individual contributors. All rights reserved.
+
+See the file "LICENSE" for information on the history of this software, terms & conditions for usage, and a DISCLAIMER OF ALL WARRANTIES.
