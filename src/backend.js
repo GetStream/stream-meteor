@@ -75,7 +75,7 @@ StreamBackend.prototype = {
     return modelClass.find({_id: {$in: objectsIds}}).fetch();
   },
 
-  retreiveObjects: function(references) {
+  retrieveObjects: function(references) {
     var objects = {};
     var self = this;
 
@@ -106,7 +106,7 @@ hint: are you retrieving objects before the (feed) subscription is ready`);
   enrichActivities: function(activities) {
     var self = this;
     var references = this.collectReferences(activities);
-    var objects = this.retreiveObjects(references);
+    var objects = this.retrieveObjects(references);
 
     self.iterActivityFieldsWithReferences(activities, function(args) {
       if (objects[args.modelRef] && objects[args.modelRef][args.instanceRef] && args.field !== 'foreign_id') {
@@ -120,7 +120,7 @@ hint: are you retrieving objects before the (feed) subscription is ready`);
   enrichActivity: function(activity) {
     var self = this;
     var references = this.collectReferences([activity]);
-    var objects = this.retreiveObjects(references);
+    var objects = this.retrieveObjects(references);
 
     self.iterActivityFieldsWithReferences([activity], function(args) {
       if (objects[args.modelRef] && objects[args.modelRef][args.instanceRef] && args.field !== 'foreign_id') {
